@@ -1,12 +1,9 @@
-import 'zone.js/dist/zone-mix';
 import 'reflect-metadata';
-import '../polyfills';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -42,7 +39,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    HttpModule, 
     AppRoutingModule,
     TranslateModule.forRoot({
       loader: {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { InputData } from './imput-data';
-import { ipcRenderer } from 'electron';
+import { ElectronService } from './electron.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,11 +26,17 @@ export class InputDataService {
 
   private data: any;
 
-  constructor() {
-
+  constructor(private electronService: ElectronService) {
     this.data = new Array();
-    // ローカルファイルを読み込む
-    const arg = ipcRenderer.sendSync('read-csv-file');
+    
+    let arg = '';
+    if (this.electronService.isElectron()) {
+      // Only use ipcRenderer in electron environment
+      arg = this.electronService.electron.ipcRenderer.sendSync('read-csv-file');
+    } else {
+      // Browser environment - could implement fallback here if needed
+      console.log('Running in browser mode - CSV reading not available');
+    }
 
     const tmp = arg.split("\n");
     for (let i: number = 1; i < tmp.length; ++i) {

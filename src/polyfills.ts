@@ -43,7 +43,7 @@
 
 /** Evergreen browsers require these. **/
 // Used for reflect-metadata in JIT. If you use AOT (and only Angular decorators), you can remove.
-import 'core-js/es7/reflect';
+// import 'core-js/es7/reflect';  // Removed as part of Angular 15 upgrade - no longer required
 
 
 /**
@@ -70,14 +70,17 @@ import 'core-js/es7/reflect';
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */
-// import 'zone.js/dist/zone-mix';  // Included with Angular CLI.
+import 'zone.js';  // Included with Angular CLI.
 
 /**
  * You can load zone-patch-electron to allow electron native APIs
  * (Such as dialog/shortcut/menu/getFileIcon/shell/session/
  * desktopCapturer/onEvent) in ngZone
  */
-// import 'zone.js/dist/zone-patch-electron'; // add zone-patch-electron to patch Electron native API
+// Only import zone-patch-electron in electron environment
+if (window.process && window.process.type) {
+  require('zone.js/plugins/zone-patch-electron');
+}
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
