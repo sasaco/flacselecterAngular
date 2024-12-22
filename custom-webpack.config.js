@@ -9,5 +9,10 @@ module.exports = {
     fs: "commonjs fs",
     path: "commonjs path",
     crypto: "commonjs crypto"
+  },
+  resolve: {
+    fallback: {
+      "timers": require.resolve("timers-browserify")
+    }
   }
 };
