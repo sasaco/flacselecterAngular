@@ -1,0 +1,75 @@
+$border-color: #70ad47; // ボーダーライン
+$primary-color: #507e32; // ボタン濃い
+$primary-color-light: #99c184; // ボタン薄い
+$disabled-background-color: #808080; // 無効なINPUTの背景色
+
+// utils
+.container {
+	padding: 0 2rem;
+}
+
+.is-flex {
+	display: flex;
+}
+
+// common
+body {
+	line-height: 1.5;
+}
+
+.app-root {
+	width: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 0;
+}
+
+// each page
+.header {
+	margin: 1rem 0;
+	.liner {
+		align-items: center;
+		display: flex;
+	}
+	.title-and-version {
+		border-bottom: 1px solid $border-color;
+		padding: 0 0.5rem;
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		flex: 1 0 auto;
+	}
+	img {
+		width: 3rem;
+		margin-right: 1rem;
+	}
+}
+
+.page-selector {
+	display: flex;
+	cursor: pointer;
+	font-size: 1.2rem;
+    margin: 1rem 0 0;
+    
+    a {
+	    display: flex;
+        height: 32px;
+        width: 150px;
+        padding: 10px;
+        margin-right: 4px;
+        color: khaki;
+        background: $primary-color;
+        justify-content: center;
+        text-decoration: none;
+        float: left;
+    }
+
+    a.is-active {
+        background-color: $primary-color-light;
+        color: white;
+    } 
+        
+}
+
+

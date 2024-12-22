@@ -1,0 +1,52 @@
+<div>
+  <div class="container">
+    <div class="result">
+      <div class="conditions-summary">
+        <div class="line">
+          <div class="condition-name">構造条件</div>:
+          <div class="content">{{inputString1}}</div>
+        </div>
+        <div class="line">
+          <div class="condition-name">調査・計測結果</div>:
+          <div class="content">{{inputString2}}</div>
+        </div>
+        <div class="line">
+          <div class="condition-name">対策工条件</div>:
+          <div class="content">{{inputString3}}
+          </div>
+        </div>
+      </div>
+
+      <div class="result-numbers">
+        <div>
+          <div>対策後の予測内空変位速度</div>
+          <div class="number">
+            <span class="number-box">{{displacement}}</span>
+            mm/年
+          </div>
+        </div>
+        <div>
+          <div>変位抑制効果</div>
+          <div class="number">
+            <span class="number-box">{{effection}}</span>％
+          </div>
+        </div>
+      </div>
+
+      <div class="images">
+        <div>
+          <div>【対策工なし】</div>
+          <img id="outputimage" src="{{imgString0}}" />
+        </div>
+
+        <div>
+          <div>【対策工あり】</div>
+          <img id="outputimage" src="{{imgString1}}" />
+        </div>
+      </div>
+      <div class='alert'>
+        <div>{{alertString}}</div>
+      </div>
+    </div>
+  </div>
+</div>

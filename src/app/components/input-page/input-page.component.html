@@ -1,0 +1,208 @@
+<div>
+  <div class="container">
+    <div class="section-title">
+      <h2 class="section-title">構造条件</h2>
+      <div class="divider"></div>
+    </div>
+  </div>
+
+  <div class="container conditions">
+    <div class="liner">
+      <fieldset>
+        <legend>トンネル形状</legend>
+        <ng-container *ngFor="let x of tunnelKeizyoList; index as i">
+          <div>
+            <label>
+              <input type="radio" name="tunnelKeizyo" id="tunnelKeizyo{{i}}" [(ngModel)]="input.Data.tunnelKeizyo"
+                [value]="x.id" [checked]="input.Data.tunnelKeizyo == x.id" (change)="setEnable()" />{{ x.title }}
+            </label>
+          </div>
+        </ng-container>
+      </fieldset>
+
+      <fieldset>
+        <legend>覆工巻厚</legend>
+        <div id="textbox">
+          <input type="number" name="fukukouMakiatsu" [(ngModel)]="tempFukukouMakiatsu" (change)="setFukukouMakiatsu()"
+            style="width: 65px; text-align: center;" min="30" max="70" />cm
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>インバートの有無</legend>
+        <ng-container *ngFor="let x of invertList; index as i">
+          <div>
+            <label>
+              <input type="radio" name="invert" id="invert{{ i }}" [(ngModel)]="input.Data.invert" [value]="x.id"
+                [checked]="input.Data.invert == x.id" (change)="setEnable()" />{{ x.title }}
+            </label>
+          </div>
+        </ng-container>
+      </fieldset>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="section-title">
+      <h2 class="section-title">調査・計測結果の条件</h2>
+      <div class="divider"></div>
+    </div>
+  </div>
+
+
+  <div class="container conditions">
+    <div class="liner">
+      <fieldset>
+        <legend>背面空洞の有無</legend>
+        <ng-container *ngFor="let x of haimenKudoList; index as i">
+          <div>
+            <label>
+              <input type="radio" name="haimenKudo" id="haimenKudo{{ i }}" [(ngModel)]="input.Data.haimenKudo"
+                [value]="x.id" [checked]="input.Data.haimenKudo == x.id" (change)="setEnable()" />{{ x.title }}
+            </label>
+          </div>
+        </ng-container>
+      </fieldset>
+      <fieldset>
+        <legend>変形モード</legend>
+        <ng-container *ngFor="let x of henkeiModeList; index as i">
+          <div id="{{henkeiModeStyle[i]}}">
+            <label>
+              <input type="radio" name="henkeiMode" id="henkeiMode{{ i }}" [(ngModel)]="input.Data.henkeiMode"
+                [value]="x.id" [checked]="input.Data.henkeiMode == x.id" [disabled]="henkeiModeStyle[i] != 'Enable'"
+                (change)="setEnable()" />{{ x.title }}
+            </label>
+          </div>
+        </ng-container>
+      </fieldset>
+
+      <fieldset>
+        <legend>地山強度</legend>
+        <input type="number" [(ngModel)]="tempJiyamaKyodo" (change)="setJiyamaKyodo()"
+          style="width: 65px; text-align: center;" min="2" max="8" />MPa
+      </fieldset>
+
+      <fieldset>
+        <legend>内空変位速度, 盤ぶくれ速度</legend>
+        <input type="number" [(ngModel)]="tempNaikuHeniSokudo" (change)="setNaikuHeniSokudo()"
+          style="width: 65px; text-align: center;" />mm/年
+        <button (click)="getMonitoringData()">モニタリングデータ取得</button>
+        <div>
+          <pre>{{ tempMonitoringData}}</pre>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="section-title">
+      <h2 class="section-title">対策工の条件</h2>
+      <div class="divider"></div>
+    </div>
+  </div>
+
+  <div class="container conditions">
+    <div class="liner">
+      <fieldset>
+        <legend>裏込注入工</legend>
+        <ng-container *ngFor="let x of uragomeChunyukoList; index as i">
+          <div id="{{uragomeChunyukoStyle[i]}}">
+            <label>
+              <input type="radio" name="uragomeChunyuko" id="uragomeChunyuko{{ i }}"
+                [(ngModel)]="input.Data.uragomeChunyuko" [value]="x.id" [checked]="input.Data.uragomeChunyuko == x.id"
+                [disabled]="uragomeChunyukoStyle[i] != 'Enable'" (change)="setEnable()" />{{ x.title }}
+            </label>
+          </div>
+        </ng-container>
+      </fieldset>
+
+      <fieldset>
+        <legend>ロックボルト工</legend>
+        <ng-container *ngIf="!henkeiMode4Flag">
+          <div class="liner">
+            <div>
+              <ng-container *ngFor="let x of lockBoltKouList; index as i">
+                <div>
+                  <label>
+                    <input type="radio" name="lockBoltKou" id="lockBoltKou{{ i }}" [(ngModel)]="input.Data.lockBoltKou"
+                      [value]="x.id" [checked]="input.Data.lockBoltKou == x.id" (change)="setEnable()" />{{ x.title }}
+                  </label>
+                </div>
+              </ng-container>
+            </div>
+            <div class="margin-left">
+              <ng-container *ngFor="let x of lockBoltLengthList; index as i">
+                <div id="{{lockBoltLengthStyle[i]}}">
+                  <label>
+                    <input type="radio" name="lockBoltLength" id="lockBoltLength{{ i }}"
+                      [(ngModel)]="input.Data.lockBoltLength" [value]="x.id"
+                      [checked]="input.Data.lockBoltLength == x.id"
+                      [disabled]="lockBoltLengthStyle[i] != 'Enable'" />{{ x.title }}
+                  </label>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="henkeiMode4Flag">
+          <p>選択できません</p>
+        </ng-container>
+      </fieldset>
+
+
+      <fieldset>
+        <legend>ロックボルト工（下向き）</legend>
+        <ng-container *ngIf="downwardLockBoltEnable">
+          <div class="liner">
+            <div>
+              <ng-container *ngFor="let x of downwardLockBoltKouList; index as i">
+                <div>
+                  <label>
+                    <input type="radio" name="downwardLockBoltKou" id="downwardLockBoltKou{{ i }}"
+                      [(ngModel)]="input.Data.downwardLockBoltKou" [value]="x.id"
+                      [checked]="input.Data.downwardLockBoltKou == x.id" (change)="setEnable()" />{{ x.title }}
+                  </label>
+                </div>
+              </ng-container>
+            </div>
+            <div class="margin-left" id="{{downwardLockBoltLengthStyle}}">
+              <ng-container *ngFor="let x of downwardLockBoltLengthList; index as i">
+                <div>
+                  <label>
+                    <input type="radio" name="downwardLockBoltLength" id="downwardLockBoltLength{{ i }}"
+                      [(ngModel)]="input.Data.downwardLockBoltLength" [value]="x.id"
+                      [checked]="input.Data.downwardLockBoltLength == x.id"
+                      [disabled]="downwardLockBoltLengthStyle != 'Enable'" />{{ x.title }}
+                  </label>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!downwardLockBoltEnable">
+          <p>選択できません</p>
+        </ng-container>
+      </fieldset>
+
+
+      <fieldset>
+        <legend>内巻補強</legend>
+        <ng-container *ngIf="!henkeiMode4Flag">
+          <ng-container *ngFor="let x of uchimakiHokyoList; index as i">
+            <div>
+              <label>
+                <input type="radio" name="uchimakiHokyo" id="uchimakiHokyo{{ i }}"
+                  [(ngModel)]="input.Data.uchimakiHokyo" [value]="x.id" [checked]="input.Data.uchimakiHokyo == x.id"
+                  (change)="setEnable()" />{{ x.title }}
+              </label>
+            </div>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="henkeiMode4Flag">
+          <p>選択できません</p>
+        </ng-container>
+      </fieldset>
+    </div>
+  </div>
+
+</div>

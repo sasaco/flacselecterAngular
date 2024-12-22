@@ -1,0 +1,60 @@
+$border-color: #70ad47; // ボーダーライン
+$primary-color: #507e32; // ボタン濃い
+$primary-color-light: #99c184; // ボタン薄い
+$disabled-background-color: #808080; // 無効なINPUTの背景色
+// utils
+.container {
+	padding: 0 2rem;
+}
+
+.result {
+	margin-top: 1rem;
+	.conditions-summary {
+		.line {
+			display: flex;
+			.condition-name {
+				width: 9rem;
+				text-align-last: justify;
+				margin-right: 0.5rem;
+			}
+			.content {
+				margin-left: 1rem;
+			}
+		}
+	}
+	.result-numbers {
+		display: flex;
+		margin: 2rem 0;
+		>* {
+			margin-left: 2rem;
+		}
+		.number {
+			margin: 0 1rem;
+			display: flex;
+			align-items: flex-end;
+		}
+		.number-box {
+			border: 1px solid black;
+			font-size: 1.5rem;
+			padding: 0.5rem 1rem;
+			margin-right: 0.5rem;
+		}
+	}
+	.images {
+		display: flex;
+		>* {
+			margin-right: 1rem;
+		}
+	}
+	.alert{
+		color: #aa0000
+	}
+
+}
+
+#outputimage{
+	width: 350px;
+	height: 350px;
+	object-fit: cover;
+	object-position: -116px;
+}
