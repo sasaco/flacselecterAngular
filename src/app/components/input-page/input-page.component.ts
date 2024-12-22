@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Http, Headers } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { InputDataService } from '../../providers/input-data.service';
 
 @Component({
@@ -97,7 +97,7 @@ export class InputPageComponent implements OnInit {
     { id: 1, title: 'あり' }
   ];
 
-  constructor(private http: Http,
+  constructor(private http: HttpClient,
               private input: InputDataService) {
   }
 
@@ -265,14 +265,15 @@ export class InputPageComponent implements OnInit {
   getMonitoringData(): void {
 
     this.http.get('http://iot2put.sakura.ne.jp/vel_now.txt', {
-      headers: new Headers({
+      headers: new HttpHeaders({
         'Content-Type': 'application/x-www-form-urlencoded'
-      })
+      }),
+      responseType: 'text'
     })
-      .subscribe(
-        response => {
+      .subscribe({
+        next: (response: string) => {
           // 通信成功時の処理（成功コールバック）
-          const str: string = response.text();
+          const str: string = response;
           this.tempMonitoringData = str;
           let MonitoringData: string[] = str.split(/\r\n|\r|\n/);
           let index: number = MonitoringData.length - 1;
@@ -282,11 +283,11 @@ export class InputPageComponent implements OnInit {
           this.tempNaikuHeniSokudo = GetNaikuHeniSokudo;
           this.setNaikuHeniSokudo();
         },
-        error => {
+        error: (error: any) => {
           // 通信失敗時の処理（失敗コールバック）
-          this.tempMonitoringData = error.statusText;
+          this.tempMonitoringData = error.statusText || 'An error occurred';
         }
-      );
+      });
   }
 
 }
