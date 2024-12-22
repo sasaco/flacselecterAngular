@@ -68,5 +68,8 @@
       }
     }
   },
-  "defaultProject": "flacselecterAngular"
+  "defaultProject": "flacselecterAngular",
+  "cli": {
+    "analytics": false
+  }
 }
