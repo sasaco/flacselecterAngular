@@ -32,7 +32,7 @@ export class InputDataService {
     let arg = '';
     if (this.electronService.isElectron()) {
       // Only use ipcRenderer in electron environment
-      arg = this.electronService.ipcRenderer.sendSync('read-csv-file');
+      arg = this.electronService.electron.ipcRenderer.sendSync('read-csv-file');
     } else {
       // Browser environment - could implement fallback here if needed
       console.log('Running in browser mode - CSV reading not available');

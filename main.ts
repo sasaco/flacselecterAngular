@@ -1,4 +1,4 @@
-import { app, Menu, BrowserWindow, screen, ipcMain, shell } from 'electron';
+import { app, Menu, BrowserWindow, screen, ipcMain, shell, contextBridge, ipcRenderer } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as fs from 'fs';
@@ -17,7 +17,12 @@ function createWindow() {
     x: 0,
     y: 0,
     width: size.width,
-    height: size.height
+    height: size.height,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload.js')
+    }
   });
 
   if (serve) {
