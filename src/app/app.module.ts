@@ -1,4 +1,4 @@
-import 'zone.js/dist/zone-mix';
+// import 'zone.js/dist/zone-mix'; // Removed as part of Angular 15 upgrade - zone.js is now handled by Angular CLI
 import 'reflect-metadata';
 import '../polyfills';
 import { BrowserModule } from '@angular/platform-browser';
