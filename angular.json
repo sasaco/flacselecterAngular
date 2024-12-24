@@ -148,7 +148,6 @@
       }
     }
   },
-  "defaultProject": "angular-electron",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
