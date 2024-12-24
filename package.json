@@ -38,7 +38,7 @@
     "32bit": "npm run build --ia32 && npx electron-builder build --ia32 --windows"
   },
   "devDependencies": {
-    "@angular-builders/custom-webpack": "^17.0.0",
+    "@angular-builders/custom-webpack": "^18.0.0",
     "@angular-devkit/build-angular": "18.2.12",
     "@angular/cli": "18.2.12",
     "@angular/common": "18.2.13",
