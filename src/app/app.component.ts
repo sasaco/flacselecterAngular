@@ -25,4 +25,10 @@ export class AppComponent {
       console.log('Mode web');
     }
   }
+
+  testDebugger() {
+    // Add a breakpoint on the next line to test debugging
+    const testValue = 42;
+    console.log('Debug test value:', testValue);
+  }
 }
