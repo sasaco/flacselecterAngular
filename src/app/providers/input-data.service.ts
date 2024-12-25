@@ -73,18 +73,24 @@ export class InputDataService {
     for (let i = 1; i < tmp.length; ++i) {
       try {
         const line = tmp[i].split(',');
-        let list = [];
-        for (let j = 0; j < 2; ++j) {
-          list.push(line[j]);
-        }
+        let list = new Array(18).fill(null);  // Initialize array with enough space
+        
+        // Store case identifier and case string (indices 0-1)
+        list[0] = line[0];
+        list[1] = line[1];
+        
+        // Parse case string components (indices 2-12)
         const col = line[1].split('-');
         for (let j = 0; j < 11; ++j) {
           const str: string = col[j].replace("case", "");
-          list.push(str);
+          list[j + 2] = str;
         }
+        
+        // Store effection values (indices 13-17)
         for (let j = 2; j < 7; ++j) {
-          list.push(line[j]);
+          list[j + 11] = parseFloat(line[j]) || 0;  // Convert to number, default to 0 if NaN
         }
+        
         this.data.push(list);
       } catch (e) {
         console.error('Error parsing CSV data:', e);
@@ -220,11 +226,15 @@ export class InputDataService {
       console.error('Failed to get case strings');
       return 0;
     }
+    
+    console.log('Case strings:', caseStrings);
+    console.log('CSV data:', this.data);
 
     // 同じデータを探す
     let crrentData: number[][] = [[-1.0, -1.0], [-1.0, -1.0]];
     let counter = 0;
     const naikuHeniSokudo = this.Data?.naikuHeniSokudo || 0;
+    console.log('Internal displacement speed:', naikuHeniSokudo);
 
     for (let index = 0; index < this.data.length; index++) {
       const row = this.data[index];
@@ -234,7 +244,10 @@ export class InputDataService {
 
       if (caseStrings[0] === crrent) {
         // 同じデータが見つかったら それを返す
-        return this.getEffection(this.data, index, naikuHeniSokudo);
+        console.log('Found exact match:', crrent);
+        const effection = this.getEffection(this.data, index, naikuHeniSokudo);
+        console.log('Calculated effection:', effection);
+        return effection;
       }
 
       //任意の数値の 巻厚, 地盤強度 以外の入力が同じデータを探す
