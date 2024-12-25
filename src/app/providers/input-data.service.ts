@@ -26,41 +26,68 @@ export class InputDataService {
 
   private data: any;
 
+  private dataLoaded: Promise<void>;
+
   constructor(private electronService: ElectronService) {
     this.data = new Array();
     
-    let arg = '';
     if (this.electronService.isElectron()) {
       // Only use ipcRenderer in electron environment
-      arg = this.electronService.electron.ipcRenderer.sendSync('read-csv-file');
+      const arg = this.electronService.electron.ipcRenderer.sendSync('read-csv-file');
+      if (arg) {
+        this.dataLoaded = Promise.resolve(this.parseCSVData(arg));
+      } else {
+        console.error('No CSV data received in electron mode');
+        this.dataLoaded = Promise.reject('No CSV data received in electron mode');
+      }
     } else {
-      // Browser environment - could implement fallback here if needed
-      console.log('Running in browser mode - CSV reading not available');
+      // Browser environment - implement CSV loading fallback
+      console.log('Running in browser mode - Loading CSV from assets');
+      this.dataLoaded = fetch('./assets/data.csv')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.text();
+        })
+        .then(text => {
+          if (!text) {
+            throw new Error('Empty CSV data received');
+          }
+          console.log('CSV data loaded successfully');
+          this.parseCSVData(text);
+        })
+        .catch(error => {
+          console.error('Error loading CSV in browser mode:', error);
+          throw error;
+        });
     }
+  }
 
-    const tmp = arg.split("\n");
-    for (let i: number = 1; i < tmp.length; ++i) {
+  private parseCSVData(csvText: string): void {
+    if (!csvText) {
+      console.error('Empty CSV text provided to parser');
+      return;
+    }
+    const tmp = csvText.split("\n");
+    for (let i = 1; i < tmp.length; ++i) {
       try {
         const line = tmp[i].split(',');
-
-        let list = []
-        for (let j: number = 0; j < 2; ++j) {
+        let list = [];
+        for (let j = 0; j < 2; ++j) {
           list.push(line[j]);
         }
-
-        let col = line[1].split('-');
-        for (let j: number = 0; j < 11; ++j) {
-          const str: string = col[j].replace("case", "")
+        const col = line[1].split('-');
+        for (let j = 0; j < 11; ++j) {
+          const str: string = col[j].replace("case", "");
           list.push(str);
         }
-
-        for (let j: number = 2; j < 7; ++j) {
+        for (let j = 2; j < 7; ++j) {
           list.push(line[j]);
         }
-
         this.data.push(list);
       } catch (e) {
-        //console.log(e);
+        console.error('Error parsing CSV data:', e);
       }
     }
   }
@@ -163,73 +190,92 @@ export class InputDataService {
     return result;
   }
 
-  public getEffectionNum(): number {
+  private getEffection(data: any, index: number, naikuHeniSokudo: number): number {
+    if (!data || !data[index]) {
+      console.error('Invalid data or index in getEffection');
+      return 0;
+    }
+    const d = data[index];
+    if (naikuHeniSokudo < 1) {
+      return d[13] || 0;
+    } else if (naikuHeniSokudo < 2) {
+      return d[14] || 0;
+    } else if (naikuHeniSokudo < 3) {
+      return d[15] || 0;
+    } else if (naikuHeniSokudo < 10) {
+      return d[16] || 0;
+    } else {
+      return d[17] || 0;
+    }
+  }
 
-    function getEffection(data: any, index: number, naikuHeniSokudo: number): number {
-      let effection: number;
-      const d = data[index];
-      if (naikuHeniSokudo < 1) {
-        effection = d[13];
-      } else if (naikuHeniSokudo < 2) {
-        effection = d[14];
-      } else if (naikuHeniSokudo < 3) {
-        effection = d[15];
-      } else if (naikuHeniSokudo < 10) {
-        effection = d[16];
-      } else {
-        effection = d[17];
-      }
-      return effection;
+  private findMatchingEffection(): number {
+    if (!this.data || !Array.isArray(this.data)) {
+      console.error('Data is not properly initialized');
+      return 0;
     }
 
-
-    const CaseStrings: string[] = this.getCaseStrings(false);
+    const caseStrings = this.getCaseStrings(false);
+    if (!caseStrings) {
+      console.error('Failed to get case strings');
+      return 0;
+    }
 
     // 同じデータを探す
     let crrentData: number[][] = [[-1.0, -1.0], [-1.0, -1.0]];
-    let counter: number = 0;
+    let counter = 0;
+    const naikuHeniSokudo = this.Data?.naikuHeniSokudo || 0;
 
     for (let index = 0; index < this.data.length; index++) {
       const row = this.data[index];
-      let crrent: string = row[1]; 
+      if (!row || !row[1]) continue;
+      
+      const crrent = row[1];
 
-      // 内空変位速度
-      const naikuHeniSokudo: number = this.Data.naikuHeniSokudo;
-
-      if (CaseStrings[0] === crrent) {
+      if (caseStrings[0] === crrent) {
         // 同じデータが見つかったら それを返す
-        return getEffection(this.data, index, naikuHeniSokudo);
+        return this.getEffection(this.data, index, naikuHeniSokudo);
       }
+
       //任意の数値の 巻厚, 地盤強度 以外の入力が同じデータを探す
-      if (CaseStrings[3] === crrent) {
-        crrentData[0][0] = getEffection(this.data, index, naikuHeniSokudo);
+      if (caseStrings[3] === crrent) {
+        crrentData[0][0] = this.getEffection(this.data, index, naikuHeniSokudo);
         counter++;
       }
-      if (CaseStrings[4] === crrent) {
-        crrentData[1][0] = getEffection(this.data, index, naikuHeniSokudo);
+      if (caseStrings[4] === crrent) {
+        crrentData[1][0] = this.getEffection(this.data, index, naikuHeniSokudo);
         counter++;
       }
-      if (CaseStrings[5] === crrent) {
-        crrentData[0][1] = getEffection(this.data, index, naikuHeniSokudo);
+      if (caseStrings[5] === crrent) {
+        crrentData[0][1] = this.getEffection(this.data, index, naikuHeniSokudo);
         counter++;
       }
-      if (CaseStrings[6] === crrent) {
-        crrentData[1][1] = getEffection(this.data, index, naikuHeniSokudo);
+      if (caseStrings[6] === crrent) {
+        crrentData[1][1] = this.getEffection(this.data, index, naikuHeniSokudo);
         counter++;
       }
     }
+
     if (counter < 4) {
-      return null;
+      return 0;
     }
 
-    const temp1: number = (crrentData[1][0] - crrentData[0][0]) * this.Data.fukukouMakiatsu / 30 + 2 * crrentData[0][0] - crrentData[1][0];
-    const temp2: number = (crrentData[1][1] - crrentData[0][1]) * this.Data.fukukouMakiatsu / 30 + 2 * crrentData[0][1] - crrentData[1][1];
-
-    const temp3: number = (temp2 - temp1) * this.Data.jiyamaKyodo / 6 + 4 * temp1 / 3 - temp2 / 3;
+    const temp1 = (crrentData[1][0] - crrentData[0][0]) * (this.Data?.fukukouMakiatsu || 0) / 30 + 2 * crrentData[0][0] - crrentData[1][0];
+    const temp2 = (crrentData[1][1] - crrentData[0][1]) * (this.Data?.fukukouMakiatsu || 0) / 30 + 2 * crrentData[0][1] - crrentData[1][1];
+    const temp3 = (temp2 - temp1) * (this.Data?.jiyamaKyodo || 0) / 6 + 4 * temp1 / 3 - temp2 / 3;
 
     //少数1桁にラウンド
     return Math.round(temp3 * 10) / 10;
-
   }
 
-}
+  public async getEffectionNum(): Promise<number> {
+    try {
+      await this.dataLoaded;
+      return this.findMatchingEffection();
+    } catch (error) {
+      console.error('Error getting effection number:', error);
+      return 0;
+    }
+  }
+
+  }
