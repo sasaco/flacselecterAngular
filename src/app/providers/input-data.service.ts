@@ -240,16 +240,17 @@ export class InputDataService {
       return 0;
     }
     const d = data[index];
+    // CSV columns: [caseNum, caseString, speed1, speed2, speed3, speed10, speedOver10]
     if (naikuHeniSokudo < 1) {
-      return d[13] || 0;
+      return parseFloat(d[2]) || 0;  // Column for speed < 1
     } else if (naikuHeniSokudo < 2) {
-      return d[14] || 0;
+      return parseFloat(d[3]) || 0;  // Column for 1 ≤ speed < 2
     } else if (naikuHeniSokudo < 3) {
-      return d[15] || 0;
+      return parseFloat(d[4]) || 0;  // Column for 2 ≤ speed < 3
     } else if (naikuHeniSokudo < 10) {
-      return d[16] || 0;
+      return parseFloat(d[5]) || 0;  // Column for 3 ≤ speed < 10
     } else {
-      return d[17] || 0;
+      return parseFloat(d[6]) || 0;  // Column for speed ≥ 10
     }
   }
 
