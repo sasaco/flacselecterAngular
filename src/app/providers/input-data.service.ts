@@ -69,25 +69,56 @@ export class InputDataService {
       console.error('Empty CSV text provided to parser');
       return;
     }
-    const tmp = csvText.split("\n");
+
+    // Split lines and filter out empty or whitespace-only lines
+    const tmp = csvText.split("\n")
+      .map(line => line.trim())
+      .filter(line => line.length > 0);
+
+    // Skip header row (i=1)
     for (let i = 1; i < tmp.length; ++i) {
       try {
         const line = tmp[i].split(',');
+        
+        // Validate minimum required columns
+        if (line.length < 7) {  // We need at least 7 columns for valid data
+          console.warn('Skipping malformed CSV line (insufficient columns):', tmp[i]);
+          continue;
+        }
+
+        // Validate case string format in second column
+        if (!line[1] || !line[1].includes('-')) {
+          console.warn('Skipping malformed CSV line (invalid case string format):', tmp[i]);
+          continue;
+        }
+
         let list = [];
+        // First two columns (case number and case string)
         for (let j = 0; j < 2; ++j) {
           list.push(line[j]);
         }
+
+        // Parse case string components
         const col = line[1].split('-');
+        if (col.length < 11) {
+          console.warn('Skipping malformed CSV line (invalid case string components):', tmp[i]);
+          continue;
+        }
+
+        // Extract numeric values from case string
         for (let j = 0; j < 11; ++j) {
           const str: string = col[j].replace("case", "");
           list.push(str);
         }
+
+        // Add remaining columns (effection values)
         for (let j = 2; j < 7; ++j) {
           list.push(line[j]);
         }
+
         this.data.push(list);
       } catch (e) {
-        console.error('Error parsing CSV data:', e);
+        console.error('Error parsing CSV line:', tmp[i], e);
       }
     }
   }
@@ -130,6 +161,18 @@ export class InputDataService {
   }
 
   public getCaseStrings(flg:boolean = true): string[] {
+    console.log('getCaseStrings called with inputs:', {
+      tunnelKeizyo: this.Data.tunnelKeizyo,
+      fukukouMakiatsu: this.Data.fukukouMakiatsu,
+      jiyamaKyodo: this.Data.jiyamaKyodo,
+      naikuHeniSokudo: this.Data.naikuHeniSokudo,
+      invert: this.Data.invert,
+      haimenKudo: this.Data.haimenKudo,
+      henkeiMode: this.Data.henkeiMode,
+      uragomeChunyuko: this.Data.uragomeChunyuko,
+      lockBoltKou: this.Data.lockBoltKou,
+      lockBoltLength: this.Data.lockBoltLength
+    });
 
     const result: string[] = new Array();
 
@@ -187,6 +230,7 @@ export class InputDataService {
     numbers[5] = 8;
     result.push(caseString(numbers));
 
+    console.log('Generated case strings:', result);
     return result;
   }
 
