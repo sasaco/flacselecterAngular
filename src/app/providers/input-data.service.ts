@@ -265,11 +265,17 @@ export class InputDataService {
       console.error('Failed to get case strings');
       return 0;
     }
+    console.log('Finding matching effection for case strings:', caseStrings);
 
     // 同じデータを探す
     let crrentData: number[][] = [[-1.0, -1.0], [-1.0, -1.0]];
     let counter = 0;
     const naikuHeniSokudo = this.Data?.naikuHeniSokudo || 0;
+    console.log('Current parameters:', {
+      fukukouMakiatsu: this.Data?.fukukouMakiatsu,
+      jiyamaKyodo: this.Data?.jiyamaKyodo,
+      naikuHeniSokudo
+    });
 
     for (let index = 0; index < this.data.length; index++) {
       const row = this.data[index];
@@ -279,7 +285,10 @@ export class InputDataService {
 
       if (caseStrings[0] === crrent) {
         // 同じデータが見つかったら それを返す
-        return this.getEffection(this.data, index, naikuHeniSokudo);
+        console.log('Found exact match with case string:', crrent);
+        const effection = this.getEffection(this.data, index, naikuHeniSokudo);
+        console.log('Returning exact match effection:', effection);
+        return effection;
       }
 
       //任意の数値の 巻厚, 地盤強度 以外の入力が同じデータを探す
@@ -302,15 +311,26 @@ export class InputDataService {
     }
 
     if (counter < 4) {
+      console.log('Insufficient matching cases found, counter:', counter);
       return 0;
     }
+
+    console.log('Interpolating with values:', {
+      crrentData,
+      fukukouMakiatsu: this.Data?.fukukouMakiatsu,
+      jiyamaKyodo: this.Data?.jiyamaKyodo
+    });
+
 
     const temp1 = (crrentData[1][0] - crrentData[0][0]) * (this.Data?.fukukouMakiatsu || 0) / 30 + 2 * crrentData[0][0] - crrentData[1][0];
     const temp2 = (crrentData[1][1] - crrentData[0][1]) * (this.Data?.fukukouMakiatsu || 0) / 30 + 2 * crrentData[0][1] - crrentData[1][1];
     const temp3 = (temp2 - temp1) * (this.Data?.jiyamaKyodo || 0) / 6 + 4 * temp1 / 3 - temp2 / 3;
 
+    console.log('Interpolation calculations:', { temp1, temp2, temp3 });
     //少数1桁にラウンド
-    return Math.round(temp3 * 10) / 10;
+    const result = Math.round(temp3 * 10) / 10;
+    console.log('Final interpolated result:', result);
+    return result;
   }
 
   public async getEffectionNum(): Promise<number> {
