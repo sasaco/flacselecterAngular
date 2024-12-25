@@ -3,9 +3,10 @@ import { InputDataService } from '../../providers/input-data.service';
 import { fromEventPattern } from 'rxjs';
 
 @Component({
-  selector: 'app-output-page',
-  templateUrl: './output-page.component.html',
-  styleUrls: ['./output-page.component.scss']
+    selector: 'app-output-page',
+    templateUrl: './output-page.component.html',
+    styleUrls: ['./output-page.component.scss'],
+    standalone: false
 })
   
 export class OutputPageComponent implements OnInit {

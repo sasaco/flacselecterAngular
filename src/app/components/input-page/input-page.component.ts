@@ -3,9 +3,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { InputDataService } from '../../providers/input-data.service';
 
 @Component({
-  selector: 'app-input-page',
-  templateUrl: './input-page.component.html',
-  styleUrls: ['./input-page.component.scss']
+    selector: 'app-input-page',
+    templateUrl: './input-page.component.html',
+    styleUrls: ['./input-page.component.scss'],
+    standalone: false
 })
 
 export class InputPageComponent implements OnInit {
