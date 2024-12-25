@@ -1,0 +1,31 @@
+{
+  "name": "minimal-test-case",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "npm run electron:serve",
+    "electron:serve-tsc": "tsc main.ts",
+    "electron:serve": "wait-on http-get://localhost:4200/ && npm run electron:serve-tsc && xvfb-run -a electron . --serve",
+    "electron:local": "npm run build:prod && cross-env ELECTRON=true electron .",
+    "build:prod": "ng build --configuration production"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^15.2.10",
+    "@angular/cli": "^15.2.10",
+    "@angular/common": "^15.2.10",
+    "@angular/core": "^15.2.10",
+    "@angular/platform-browser": "^15.2.10",
+    "@angular/platform-browser-dynamic": "^15.2.10",
+    "cross-env": "^7.0.3",
+    "electron": "^27.1.0",
+    "electron-reload": "^2.0.0-alpha.1",
+    "rxjs": "^7.8.1",
+    "typescript": "^4.8.4",
+    "wait-on": "^8.0.1",
+    "zone.js": "^0.13.3"
+  }
+}
