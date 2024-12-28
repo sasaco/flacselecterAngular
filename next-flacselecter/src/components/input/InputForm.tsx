@@ -1,6 +1,6 @@
 'use client';
 
-import { useInputDataStore } from '@/services/inputData';
+import { useInputDataStore } from '../../services/inputData';
 import { useState } from 'react';
 
 interface RadioOption {
@@ -9,7 +9,7 @@ interface RadioOption {
 }
 
 export default function InputForm() {
-  const { data, setData } = useInputDataStore();
+  const { inputData, setInputData } = useInputDataStore();
   
   const tunnelOptions: RadioOption[] = [
     { value: 1, label: '単線' },
@@ -24,19 +24,19 @@ export default function InputForm() {
     { value: 4, label: '盤ぶくれ' }
   ];
 
-  const handleRadioChange = (field: keyof typeof data) => (value: number) => {
-    setData({ [field]: value });
+  const handleRadioChange = (field: keyof typeof inputData) => (value: number) => {
+    setInputData({ [field]: value });
   };
 
-  const handleNumberChange = (field: keyof typeof data) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNumberChange = (field: keyof typeof inputData) => (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(e.target.value);
     if (!isNaN(value)) {
-      setData({ [field]: value });
+      setInputData({ [field]: value });
     }
   };
 
-  const handleToggle = (field: keyof typeof data) => () => {
-    setData({ [field]: data[field] === 0 ? 1 : 0 });
+  const handleToggle = (field: keyof typeof inputData) => () => {
+    setInputData({ [field]: inputData[field] === 0 ? 1 : 0 });
   };
 
   return (
@@ -57,7 +57,7 @@ export default function InputForm() {
                     type="radio"
                     name="tunnelKeizyo"
                     value={option.value}
-                    checked={data.tunnelKeizyo === option.value}
+                    checked={inputData.tunnelKeizyo === option.value}
                     onChange={() => handleRadioChange('tunnelKeizyo')(option.value)}
                   />
                   {option.label}
@@ -69,7 +69,7 @@ export default function InputForm() {
               <label>覆工巻厚 (cm)</label>
               <input
                 type="number"
-                value={data.fukukouMakiatsu}
+                value={inputData.fukukouMakiatsu}
                 onChange={handleNumberChange('fukukouMakiatsu')}
                 min="0"
                 step="1"
@@ -80,7 +80,7 @@ export default function InputForm() {
               <label>
                 <input
                   type="checkbox"
-                  checked={data.invert === 1}
+                  checked={inputData.invert === 1}
                   onChange={handleToggle('invert')}
                 />
                 インバート
@@ -94,7 +94,7 @@ export default function InputForm() {
               <label>
                 <input
                   type="checkbox"
-                  checked={data.haimenKudo === 1}
+                  checked={inputData.haimenKudo === 1}
                   onChange={handleToggle('haimenKudo')}
                 />
                 背面空洞
@@ -108,7 +108,7 @@ export default function InputForm() {
                     type="radio"
                     name="henkeiMode"
                     value={option.value}
-                    checked={data.henkeiMode === option.value}
+                    checked={inputData.henkeiMode === option.value}
                     onChange={() => handleRadioChange('henkeiMode')(option.value)}
                   />
                   {option.label}
@@ -120,7 +120,7 @@ export default function InputForm() {
               <label>地山強度 (MPa)</label>
               <input
                 type="number"
-                value={data.jiyamaKyodo}
+                value={inputData.jiyamaKyodo}
                 onChange={handleNumberChange('jiyamaKyodo')}
                 min="0"
                 step="0.1"
@@ -131,7 +131,7 @@ export default function InputForm() {
               <label>内空変位速度 (mm/年)</label>
               <input
                 type="number"
-                value={data.naikuHeniSokudo}
+                value={inputData.naikuHeniSokudo}
                 onChange={handleNumberChange('naikuHeniSokudo')}
                 min="0"
                 step="0.1"
