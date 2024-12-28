@@ -1,0 +1,247 @@
+$border-color: #70ad47; // ボーダーライン
+$primary-color: #507e32; // ボタン濃い
+$primary-color-light: #99c184; // ボタン薄い
+$disabled-background-color: #808080; // 無効なINPUTの背景色
+
+:root {
+  --border-color: #{$border-color};
+  --primary-color: #{$primary-color};
+  --primary-color-light: #{$primary-color-light};
+  --disabled-color: #{$disabled-background-color};
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+#Disable {
+  background-color: #666666;
+}
+
+.liner {
+  display: flex;
+}
+
+p {
+  color: #ccc;
+}
+
+.condition-container {
+  position: relative;
+  border: 1px solid black;
+  padding: 2rem 1rem 1rem;
+  min-width: 10rem;
+  margin-right: 1rem;
+
+  .condition-name {
+    position: absolute;
+    top: -0.5rem;
+    left: 1rem;
+    background: white;
+    padding: 0 0.5rem;
+  }
+
+  .lockbolt {
+    display: flex;
+    > *:first-child {
+      margin-right: 1rem;
+    }
+  }
+
+  .is-disabled {
+    background: $disabled-background-color;
+  }
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  margin: 6px 0;
+  h2 {
+    font-size: 1.2rem;
+    font-weight: normal;
+    margin-right: 0.5rem;
+  }
+  .divider {
+    border-bottom: 1px solid $border-color;
+    flex: 1 0 auto;
+  }
+}
+
+.margin-left {
+  margin-left: 1rem;
+}
+
+fieldset {
+  border: 1px solid $border-color;
+  border-radius: 4px;
+  padding: 15px;
+  margin: 15px 0;
+  min-width: 200px;
+  
+  legend {
+    color: $primary-color;
+    font-weight: 500;
+    padding: 0 10px;
+  }
+
+  &:not(:last-child) {
+    margin-right: 15px;
+  }
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 15px 0;
+
+  .radio-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    margin: 0;
+    padding: 2px 0;
+
+    &.disabled {
+      color: $disabled-background-color;
+      cursor: not-allowed;
+      
+      input {
+        background-color: $disabled-background-color;
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+    }
+
+    input[type="radio"] {
+      margin: 0;
+      width: 16px;
+      height: 16px;
+    }
+  }
+}
+
+.number-input {
+  margin: 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  input[type="number"] {
+    width: 65px;
+    text-align: center;
+    padding: 4px;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+    }
+
+    &:disabled {
+      background-color: $disabled-background-color;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+  }
+}
+
+.container {
+  padding: 0 2rem;
+}
+
+.result {
+  margin: 30px 0;
+  
+  .conditions-summary {
+    margin-bottom: 30px;
+    
+    .line {
+      display: flex;
+      align-items: baseline;
+      margin-bottom: 10px;
+      
+      .condition-name {
+        width: 120px;
+        text-align-last: justify;
+        color: $primary-color;
+        font-weight: 500;
+      }
+      
+      .content {
+        margin-left: 15px;
+      }
+    }
+  }
+
+  .result-numbers {
+    display: flex;
+    margin: 30px 0;
+    gap: 40px;
+    
+    > div {
+      > div:first-child {
+        margin-bottom: 10px;
+        color: $primary-color;
+        font-weight: 500;
+      }
+    }
+    
+    .number {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      
+      .number-box {
+        border: 1px solid $border-color;
+        border-radius: 4px;
+        font-size: 24px;
+        padding: 8px 16px;
+        min-width: 60px;
+        text-align: center;
+      }
+    }
+  }
+
+  .images {
+    display: flex;
+    gap: 30px;
+    margin-top: 30px;
+    
+    > div {
+      h3 {
+        margin: 0 0 15px;
+        font-size: 16px;
+        font-weight: 500;
+        color: $primary-color;
+      }
+      
+      img {
+        width: 350px;
+        height: 350px;
+        object-fit: cover;
+        object-position: -116px;
+        border: 1px solid $border-color;
+        border-radius: 4px;
+      }
+    }
+  }
+
+  .alert {
+    color: #aa0000;
+    margin-top: 15px;
+    font-size: 14px;
+  }
+}
+
+#outputimage {
+  width: 350px;
+  height: 350px;
+  object-fit: cover;
+  object-position: -116px;
+}
