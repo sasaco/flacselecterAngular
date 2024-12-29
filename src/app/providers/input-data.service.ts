@@ -35,10 +35,16 @@ export class InputDataService {
       // Only use ipcRenderer in electron environment
       const arg = this.electronService.electron.ipcRenderer.sendSync('read-csv-file');
       if (arg) {
-        this.dataLoaded = Promise.resolve(this.parseCSVData(arg));
+        try {
+          this.parseCSVData(arg);
+          this.dataLoaded = Promise.resolve();
+        } catch (error) {
+          console.error('Error parsing CSV data in electron mode:', error);
+          this.dataLoaded = Promise.reject(error);
+        }
       } else {
         console.error('No CSV data received in electron mode');
-        this.dataLoaded = Promise.reject('No CSV data received in electron mode');
+        this.dataLoaded = Promise.reject(new Error('No CSV data received in electron mode'));
       }
     } else {
       // Browser environment - implement CSV loading fallback
@@ -51,7 +57,7 @@ export class InputDataService {
           return response.text();
         })
         .then(text => {
-          if (!text) {
+          if (!text || text.trim().length === 0) {
             throw new Error('Empty CSV data received');
           }
           console.log('CSV data loaded successfully');
@@ -59,36 +65,68 @@ export class InputDataService {
         })
         .catch(error => {
           console.error('Error loading CSV in browser mode:', error);
+          this.data = [];
           throw error;
         });
     }
   }
 
   private parseCSVData(csvText: string): void {
-    if (!csvText) {
-      console.error('Empty CSV text provided to parser');
+    if (!csvText || typeof csvText !== 'string') {
+      console.error('Invalid CSV text provided to parser');
+      this.data = [];
       return;
     }
-    const tmp = csvText.split("\n");
-    for (let i = 1; i < tmp.length; ++i) {
+
+    const lines = csvText.split("\n").filter(line => line.trim().length > 0);
+    if (lines.length < 2) { // At least header + one data row
+      console.error('CSV file has insufficient data');
+      this.data = [];
+      return;
+    }
+
+    // Skip header row and process data rows
+    for (let i = 1; i < lines.length; ++i) {
       try {
-        const line = tmp[i].split(',');
-        let list = [];
-        for (let j = 0; j < 2; ++j) {
-          list.push(line[j]);
+        const line = lines[i].split(',');
+        if (line.length < 7) { // Verify minimum required columns
+          console.warn(`Skipping invalid line ${i + 1}: insufficient columns`);
+          continue;
         }
-        const col = line[1].split('-');
+
+
+        let list = [];
+        // First two columns
+        for (let j = 0; j < 2; ++j) {
+          list.push(line[j] || ''); // Use empty string if column is undefined
+        }
+
+        // Parse case data
+        const caseData = (line[1] || '').split('-');
+        if (caseData.length < 11) {
+          console.warn(`Skipping invalid line ${i + 1}: insufficient case data columns`);
+          continue;
+        }
+
+        // Process case numbers
         for (let j = 0; j < 11; ++j) {
-          const str: string = col[j].replace("case", "");
+          const str: string = (caseData[j] || '').replace("case", "");
           list.push(str);
         }
+
+        // Remaining columns
         for (let j = 2; j < 7; ++j) {
-          list.push(line[j]);
+          list.push(line[j] || '0'); // Use '0' as default for missing numeric values
         }
+
         this.data.push(list);
       } catch (e) {
-        console.error('Error parsing CSV data:', e);
+        console.error(`Error parsing CSV line ${i + 1}:`, e);
       }
+    }
+
+    if (this.data.length === 0) {
+      console.warn('No valid data rows were parsed from CSV');
     }
   }
 
