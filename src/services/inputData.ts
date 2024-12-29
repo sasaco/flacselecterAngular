@@ -43,8 +43,9 @@ export class InputDataService {
     this.data = new Array();
     
     // Browser environment - implement CSV loading fallback
-    console.log('Running in browser mode - Loading CSV from assets');
-    this.dataLoaded = fetch('/assets/data.csv')
+    console.log('Running in browser mode - Loading CSV from public assets');
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+    this.dataLoaded = fetch(`${baseUrl}/assets/data.csv`)
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -73,23 +74,37 @@ export class InputDataService {
     for (let i = 1; i < tmp.length; ++i) {
       try {
         const line = tmp[i].split(',');
+        if (!line || line.length < 2) continue;
+        
         let list = [];
-        for (let j = 0; j < 2; ++j) {
-          list.push(line[j]);
+        // First two columns (case number and case string)
+        list.push(line[0]); // case number
+        list.push(line[1]); // full case string with parameters
+        
+        // Parse the case parameters from the second column
+        const caseMatch = line[1].match(/case\d+-(\d+(?:-\d+){9})/);
+        if (!caseMatch) {
+          console.warn(`Skipping invalid case format at line ${i}: ${line[1]}`);
+          continue;
         }
-        const col = line[1].split('-');
-        for (let j = 0; j < 11; ++j) {
-          const str: string = col[j].replace("case", "");
-          list.push(str);
+        
+        // Split parameters and remove 'case' prefix
+        const parameters = caseMatch[1].split('-');
+        for (const param of parameters) {
+          list.push(param);
         }
-        for (let j = 2; j < 7; ++j) {
-          list.push(line[j]);
+        
+        // Add the measurement values
+        for (let j = 2; j < 7 && j < line.length; ++j) {
+          list.push(parseFloat(line[j]) || 0);
         }
+        
         this.data.push(list);
       } catch (e) {
-        console.error('Error parsing CSV data:', e);
+        console.error('Error parsing CSV data at line ' + i + ':', e);
       }
     }
+    console.log('Parsed CSV data:', this.data.length, 'entries');
   }
 
   private getTargetData(flg:boolean): number[] {
