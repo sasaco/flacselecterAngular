@@ -63,7 +63,11 @@
 }
 
 .alert {
-  text-align: center;
-  color: #666;
   margin-top: 20px;
+  padding: 10px;
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  border-radius: 4px;
+  color: #856404;
+  text-align: center;
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { InputData, InputDataService } from '../services/inputData';
+import '../styles/output-page.css';
 
 export default function OutputPage() {
   const [inputString1, setInputString1] = useState<string>('');
@@ -12,6 +13,15 @@ export default function OutputPage() {
   const [displacement, setDisplacement] = useState<number>(0);
 
   const input = new InputDataService();
+  
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedData = localStorage.getItem('inputData');
+      if (savedData) {
+        input.Data = JSON.parse(savedData);
+      }
+    }
+  }, []);
 
   const getinputString1 = (): string => {
     let result: string;
@@ -96,14 +106,7 @@ export default function OutputPage() {
     return result;
   };
 
-  const getimgString = (): string[] => {
-    const CaseStrings: string[] = input.getCaseStrings();
-    // 補強しなかった場合のファイル名
-    const imgString0: string = '/img/' + CaseStrings[1] + '.png';
-    // 補強後 のファイル名
-    const imgString1: string = '/img/' + CaseStrings[2] + '.png';
-    return [imgString0, imgString1];
-  };
+  // Removed getimgString as we're using input.getCaseStrings directly
 
   const getDisplacement = (effectionValue: number): number => {
     const a: number = input.Data.naikuHeniSokudo;
@@ -136,9 +139,11 @@ export default function OutputPage() {
     setInputString2(getinputString2());
     setInputString3(getinputString3());
 
-    const imgs = getimgString();
-    setImgString0(imgs[0]);
-    setImgString1(imgs[1]);
+    const imgs = input.getCaseStrings(true);
+    console.log('Generated image case strings:', imgs);
+    // Use index 1 for no countermeasures and index 2 for with countermeasures
+    setImgString0(imgs[1]);
+    setImgString1(imgs[2]);
 
     setAlertString(getalertString());
 
@@ -192,12 +197,34 @@ export default function OutputPage() {
           <div className="images">
             <div>
               <div>【対策工なし】</div>
-              <img id="outputimage" src={imgString0} alt="対策工なし" />
+              {imgString0 && (
+                <img 
+                  id="outputimage" 
+                  src={`/assets/img/${imgString0}.png`} 
+                  alt="対策工なし"
+                  style={{ maxWidth: '100%' }}
+                  onError={(e) => {
+                    console.error('Image load error:', e);
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              )}
             </div>
 
             <div>
               <div>【対策工あり】</div>
-              <img id="outputimage" src={imgString1} alt="対策工あり" />
+              {imgString1 && (
+                <img 
+                  id="outputimage" 
+                  src={`/assets/img/${imgString1}.png`} 
+                  alt="対策工あり"
+                  style={{ maxWidth: '100%' }}
+                  onError={(e) => {
+                    console.error('Image load error:', e);
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              )}
             </div>
           </div>
           {alertString && (

@@ -1,65 +1,58 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { InputData, InputDataService } from '../services/inputData';
 import { setEnable } from '../utils/setEnable';
 import '../styles/input-page.css';
 
 export default function InputPage() {
-  const [data, setData] = useState<InputData>({
-    tunnelKeizyo: 1,
-    fukukouMakiatsu: 30,
-    invert: 1,
-    haimenKudo: 1,
-    henkeiMode: 1,
-    jiyamaKyodo: 1.0,
-    naikuHeniSokudo: 1.0,
-    uragomeChunyuko: 1,
-    lockBoltKou: 1,
-    lockBoltLength: 3.0,
-    downwardLockBoltKou: 1,
-    downwardLockBoltLength: 3.0,
-    uchimakiHokyo: 1,
-  });
+  const router = useRouter();
+  const inputService = new InputDataService();
+  const [data, setData] = useState<InputData>(inputService.Data);
 
   const tunnelKeizyoList = [
-    { id: 1, title: '馬蹄形' },
-    { id: 2, title: '円形' },
+    { id: 1, title: '単線' },
+    { id: 2, title: '複線' },
+    { id: 3, title: '新幹線（在来工法）' },
   ];
 
   const invertList = [
-    { id: 1, title: 'なし' },
-    { id: 2, title: 'あり' },
+    { id: 0, title: 'なし' },
+    { id: 1, title: 'あり' },
   ];
 
   const haimenKudoList = [
-    { id: 1, title: 'なし' },
-    { id: 2, title: 'あり' },
+    { id: 0, title: 'なし' },
+    { id: 1, title: 'あり' },
   ];
 
   const henkeiModeList = [
-    { id: 1, title: '天端沈下型' },
-    { id: 2, title: '水平圧縮型' },
-    { id: 3, title: '片押し型' },
-    { id: 4, title: '底盤隆起型' },
+    { id: 1, title: '側壁全体押出し' },
+    { id: 2, title: '側壁上部前傾' },
+    { id: 3, title: '脚部押出し' },
+    { id: 4, title: '盤ぶくれ' },
   ];
 
   const uragomeChunyukoList = [
-    { id: 1, title: 'なし' },
-    { id: 2, title: 'あり' },
+    { id: 0, title: 'なし' },
+    { id: 1, title: 'あり' },
   ];
 
   const lockBoltKouList = [
-    { id: 1, title: 'なし' },
-    { id: 2, title: 'あり' },
+    { id: 0, title: 'なし' },
+    { id: 4, title: '4本' },
+    { id: 8, title: '8本' },
+    { id: 12, title: '12本' },
   ];
 
   const downwardLockBoltKouList = [
-    { id: 1, title: 'なし' },
-    { id: 2, title: 'あり' },
+    { id: 0, title: 'なし' },
+    { id: 4, title: '4本' },
+    { id: 6, title: '6本' },
   ];
 
   const uchimakiHokyoList = [
-    { id: 1, title: 'なし' },
-    { id: 2, title: 'あり' },
+    { id: 0, title: 'なし' },
+    { id: 1, title: 'あり' },
   ];
 
   const handleChange = (field: keyof InputData, value: number) => {
@@ -71,7 +64,12 @@ export default function InputPage() {
   }, [data]);
 
   return (
-    <form className="page-container" onSubmit={(e) => e.preventDefault()}>
+    <form className="page-container" onSubmit={async (e) => {
+      e.preventDefault();
+      inputService.Data = data;
+      localStorage.setItem('inputData', JSON.stringify(data));
+      await router.push('/output-page');
+    }}>
       <div className="container">
         <div className="section-title">
           <h2 className="section-title">構造条件</h2>
@@ -244,6 +242,9 @@ export default function InputPage() {
             ))}
           </div>
         </fieldset>
+      </div>
+      <div className="submit-container">
+        <button type="submit" className="submit-button">計算する</button>
       </div>
     </form>
   );

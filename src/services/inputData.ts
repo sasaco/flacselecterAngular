@@ -19,8 +19,10 @@ export interface InputData {
 }
 
 export class InputDataService {
-  public Data: InputData = {
-    tunnelKeizyo: 1,
+  public Data: InputData;
+
+  private defaultData: InputData = {
+    tunnelKeizyo: 1, // Start with 単線 (single track)
     fukukouMakiatsu: 30,
     invert: 0,
     haimenKudo: 0,
@@ -40,29 +42,56 @@ export class InputDataService {
   private dataLoaded: Promise<void>;
 
   constructor() {
-    this.data = new Array();
+    this.data = [];
+    console.log('InputDataService constructor called');
     
-    // Browser environment - implement CSV loading fallback
-    console.log('Running in browser mode - Loading CSV from public assets');
-    const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
-    this.dataLoaded = fetch(`${baseUrl}/assets/data.csv`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.text();
-      })
-      .then(text => {
-        if (!text) {
-          throw new Error('Empty CSV data received');
-        }
-        console.log('CSV data loaded successfully');
-        this.parseCSVData(text);
-      })
-      .catch(error => {
-        console.error('Error loading CSV in browser mode:', error);
-        throw error;
-      });
+    if (typeof window !== 'undefined') {
+      const savedData = localStorage.getItem('inputData');
+      if (savedData) {
+        this.Data = JSON.parse(savedData);
+      } else {
+        this.Data = { ...this.defaultData };
+        localStorage.setItem('inputData', JSON.stringify(this.Data));
+      }
+    } else {
+      this.Data = { ...this.defaultData };
+    }
+    console.log('Initial Data state:', this.Data);
+    
+    // Initialize promise that will be resolved when CSV is loaded
+    this.dataLoaded = new Promise((resolve, reject) => {
+      if (typeof window === 'undefined') {
+        // Server-side - resolve immediately with empty data
+        console.log('Server-side rendering detected');
+        resolve();
+        return;
+      }
+      
+      // Client-side - load CSV
+      console.log('Running in browser mode - Loading CSV from public assets');
+      fetch('/assets/data.csv')
+        .then((response: Response) => {
+          if (!response.ok) {
+            console.error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.arrayBuffer();
+        })
+        .then((buffer: ArrayBuffer) => {
+          const decoder = new TextDecoder('shift-jis');
+          const text = decoder.decode(buffer);
+          if (!text) {
+            throw new Error('Empty CSV data received');
+          }
+          this.parseCSVData(text);
+          console.log('CSV data loaded successfully, first few rows:', this.data.slice(0, 3));
+          resolve();
+        })
+        .catch((error: Error) => {
+          console.error('Error loading CSV in browser mode:', error);
+          reject(error);
+        });
+    });
   }
 
   private parseCSVData(csvText: string): void {
@@ -71,43 +100,46 @@ export class InputDataService {
       return;
     }
     const tmp = csvText.split("\n");
+    this.data = [];
     for (let i = 1; i < tmp.length; ++i) {
       try {
         const line = tmp[i].split(',');
-        if (!line || line.length < 2) continue;
-        
-        let list = [];
-        // First two columns (case number and case string)
-        list.push(line[0]); // case number
-        list.push(line[1]); // full case string with parameters
-        
-        // Parse the case parameters from the second column
-        const caseMatch = line[1].match(/case\d+-(\d+(?:-\d+){9})/);
-        if (!caseMatch) {
-          console.warn(`Skipping invalid case format at line ${i}: ${line[1]}`);
+        if (!line || line.length < 7 || !line[1]) {
+          console.log('Skipping invalid line:', line);
           continue;
         }
         
-        // Split parameters and remove 'case' prefix
-        const parameters = caseMatch[1].split('-');
-        for (const param of parameters) {
-          list.push(param);
+        let list = [];
+        list.push(line[0] || '');
+        list.push(line[1] || '');
+        
+        const col = line[1].split('-');
+        if (!col || col.length < 11) {
+          console.log('Invalid case string format:', line[1]);
+          continue;
         }
         
-        // Add the measurement values
-        for (let j = 2; j < 7 && j < line.length; ++j) {
-          list.push(parseFloat(line[j]) || 0);
+        for (let j = 0; j < 11; ++j) {
+          const str = j === 0 ? (col[j] || '').replace("case", "") : (col[j] || '0');
+          list.push(str);
         }
         
-        this.data.push(list);
+        for (let j = 2; j < 7; ++j) {
+          list.push(line[j] || '0');
+        }
+        
+        if (list.length === 18) {
+          this.data.push(list);
+        }
       } catch (e) {
-        console.error('Error parsing CSV data at line ' + i + ':', e);
+        console.error('Error parsing CSV data:', e);
       }
     }
-    console.log('Parsed CSV data:', this.data.length, 'entries');
+    console.log('Parsed data:', this.data.slice(0, 3));
   }
 
   private getTargetData(flg:boolean): number[] {
+    console.log('getTargetData called with Data:', this.Data);
     let makiatsu: number = this.Data.fukukouMakiatsu;
     let kyodo: number = this.Data.jiyamaKyodo;
     if (flg === true) {
@@ -123,7 +155,7 @@ export class InputDataService {
 
     const targetData: number[] = new Array();
 
-    targetData.push(this.Data.tunnelKeizyo);
+    targetData.push(this.Data.tunnelKeizyo); // Match Angular implementation
     targetData.push(makiatsu);
     targetData.push(this.Data.invert);
     targetData.push(this.Data.haimenKudo);
@@ -140,6 +172,7 @@ export class InputDataService {
     }
     targetData.push(lockBoltLength);
 
+    console.log('Generated targetData:', targetData);
     return targetData;
   }
 
@@ -196,14 +229,17 @@ export class InputDataService {
   }
 
   private caseString(numbers: number[]): string {
+    console.log('Generating case string for numbers:', numbers);
     let str: string = numbers[0].toString();
     for (let i = 1; i < numbers.length; i++) {
       str += '-' + numbers[i].toString();
     }
-    return 'case' + str;
+    const result = 'case' + str;
+    console.log('Generated case string:', result);
+    return result;
   }
 
-  private getEffection(data: any, index: number, naikuHeniSokudo: number): number {
+  private getEffection(data: any[], index: number, naikuHeniSokudo: number): number {
     if (!data || !data[index]) {
       console.error('Invalid data or index in getEffection');
       return 0;
@@ -224,13 +260,11 @@ export class InputDataService {
 
   private findMatchingEffection(): number {
     if (!this.data || !Array.isArray(this.data)) {
-      console.error('Data is not properly initialized');
       return 0;
     }
 
     const caseStrings = this.getCaseStrings(false);
     if (!caseStrings) {
-      console.error('Failed to get case strings');
       return 0;
     }
 
@@ -246,30 +280,37 @@ export class InputDataService {
       const crrent = row[1];
 
       if (caseStrings[0] === crrent) {
+        console.log('Found exact match at index', index);
         // 同じデータが見つかったら それを返す
         return this.getEffection(this.data, index, naikuHeniSokudo);
       }
 
       //任意の数値の 巻厚, 地盤強度 以外の入力が同じデータを探す
       if (caseStrings[3] === crrent) {
+        console.log('Found interpolation point 1 at index', index);
         crrentData[0][0] = this.getEffection(this.data, index, naikuHeniSokudo);
         counter++;
       }
       if (caseStrings[4] === crrent) {
+        console.log('Found interpolation point 2 at index', index);
         crrentData[1][0] = this.getEffection(this.data, index, naikuHeniSokudo);
         counter++;
       }
       if (caseStrings[5] === crrent) {
+        console.log('Found interpolation point 3 at index', index);
         crrentData[0][1] = this.getEffection(this.data, index, naikuHeniSokudo);
         counter++;
       }
       if (caseStrings[6] === crrent) {
+        console.log('Found interpolation point 4 at index', index);
         crrentData[1][1] = this.getEffection(this.data, index, naikuHeniSokudo);
         counter++;
       }
     }
 
+
     if (counter < 4) {
+      console.log('Insufficient matches found, counter:', counter);
       return 0;
     }
 
@@ -285,8 +326,7 @@ export class InputDataService {
     try {
       await this.dataLoaded;
       return this.findMatchingEffection();
-    } catch (error) {
-      console.error('Error getting effection number:', error);
+    } catch {
       return 0;
     }
   }
