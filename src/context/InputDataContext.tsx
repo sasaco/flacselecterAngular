@@ -112,7 +112,7 @@ function InputDataProvider({ children }: { children: React.ReactNode }) {
     
     const loadCSV = async () => {
       try {
-        const response = await fetch('/data.csv', {
+        const response = await fetch('/assets/data.csv', {
           signal: controller.signal
         });
         if (!response.ok) {
