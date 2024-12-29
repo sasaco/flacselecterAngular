@@ -98,29 +98,71 @@ export default function OutputPage(): ReactElement {
   };
 
   const getImgString = (): [string | undefined, string | undefined] => {
-    const getCaseStrings = (): string[] => {
-      const tunnelType = data.tunnelKeizyo;
-      const henkeiMode = data.henkeiMode;
-      const invert = data.invert;
-      const makiatsu = data.fukukouMakiatsu;
-      const kyodo = data.jiyamaKyodo;
-      const haimenKudo = data.haimenKudo;
-      
-      // Generate case string based on input conditions
-      // Match Angular case string format exactly
-      const baseCase = `case${tunnelType}-${makiatsu}-${invert}-0-${henkeiMode}-${kyodo}-${haimenKudo}-0-0-0-0`;
-      const reinforcedCase = `case${tunnelType}-${makiatsu}-${invert}-0-${henkeiMode}-${kyodo}-${haimenKudo}-${data.uragomeChunyuko}-${data.lockBoltKou}-${data.lockBoltLength}-${data.uchimakiHokyo}`;
-      if (data.downwardLockBoltKou !== 0) {
-        return [baseCase, `${reinforcedCase}-${data.downwardLockBoltKou}-${data.downwardLockBoltLength}`];
+    function generateCaseStrings(flg: boolean = false): string[] {
+      function getTargetData(): number[] {
+        let adjustedMakiatsu = data.fukukouMakiatsu;
+        let adjustedKyodo = data.jiyamaKyodo;
+        
+        if (flg) {
+          if (data.tunnelKeizyo < 3) { // 単線, 複線
+            adjustedMakiatsu = adjustedMakiatsu < 45 ? 30 : 60;
+            adjustedKyodo = adjustedKyodo < 5 ? 2 : 8;
+          } else { // 新幹線
+            adjustedMakiatsu = adjustedMakiatsu < 60 ? 50 : 70;
+            adjustedKyodo = adjustedKyodo < 5 ? 2 : 8;
+          }
+        }
+        
+        return [
+          data.tunnelKeizyo,
+          adjustedMakiatsu,
+          data.invert,
+          data.haimenKudo,
+          data.henkeiMode,
+          adjustedKyodo,
+          data.uragomeChunyuko,
+          data.lockBoltKou,
+          data.uchimakiHokyo,
+          data.downwardLockBoltKou,
+          data.lockBoltLength || data.downwardLockBoltLength
+        ];
       }
-      return [baseCase, reinforcedCase];
-    };
 
-    const caseStrings = getCaseStrings();
-    // Return undefined if strings are empty or undefined
+      function caseString(numbers: number[]): string {
+        return 'case' + numbers.join('-');
+      }
+
+      const result: string[] = [];
+      
+      // index 0 - base case
+      let numbers = getTargetData();
+      result.push(caseString(numbers));
+
+      // index 1 - no reinforcement case (for first image)
+      numbers = getTargetData();
+      for (let i = 6; i < numbers.length; i++) {
+        numbers[i] = 0;
+      }
+      result.push(caseString(numbers));
+
+      // index 2 - reinforced case (for second image)
+      numbers = getTargetData();
+      if (numbers[0] < 3) {
+        numbers[1] = numbers[1] < 45 ? 30 : 60; // 単線, 複線
+      } else {
+        numbers[1] = numbers[1] < 60 ? 50 : 70; // 新幹線
+      }
+      numbers[5] = numbers[5] < 5 ? 2 : 8;
+      result.push(caseString(numbers));
+
+      return result;
+    }
+
+    const caseStrings = generateCaseStrings(false);
+    // Use indices 1 and 2 for images, matching Angular's implementation
     return [
-      caseStrings[0] ? `/images/${caseStrings[0]}.png` : undefined,
-      caseStrings[1] ? `/images/${caseStrings[1]}.png` : undefined
+      caseStrings[1] ? `/images/${caseStrings[1]}.png` : undefined,
+      caseStrings[2] ? `/images/${caseStrings[2]}.png` : undefined
     ];
   };
 
