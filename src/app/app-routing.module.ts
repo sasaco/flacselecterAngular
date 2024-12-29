@@ -7,9 +7,9 @@ import { OutputPageComponent } from './components/output-page/output-page.compon
 
 
 const routes: Routes = [
-    { path: '', redirectTo: '/input-page', pathMatch: 'full' },
-    { path: 'input-page', component: InputPageComponent },
-    { path: 'output-page', component: OutputPageComponent }
+    { path: '', redirectTo: '/input', pathMatch: 'full' },
+    { path: 'input', component: InputPageComponent },
+    { path: 'output', component: OutputPageComponent }
 ];
 
 @NgModule({
