@@ -1,0 +1,124 @@
+.container {
+  padding: 0 2rem;
+}
+
+.disabled {
+  background-color: #666666;
+}
+
+.liner {
+  display: flex;
+}
+
+.text {
+  color: #ccc;
+}
+
+.condition-container {
+  position: relative;
+  border: 1px solid #70ad47;
+  padding: 2rem 1rem 1rem;
+  min-width: 10rem;
+  margin-right: 1rem;
+}
+
+.condition-name {
+  position: absolute;
+  top: -0.5rem;
+  left: 1rem;
+  background: white;
+  padding: 0 0.5rem;
+}
+
+.lockbolt {
+  display: flex;
+}
+
+.lockbolt > *:first-child {
+  margin-right: 1rem;
+}
+
+.disabled {
+  background-color: #808080;
+  pointer-events: none;
+}
+
+.enabled {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  margin: 6px 0;
+}
+
+.sectionHeading {
+  font-size: 1.2rem;
+  font-weight: normal;
+  margin-right: 0.5rem;
+}
+
+.divider {
+  border-bottom: 1px solid #70ad47;
+  flex: 1 0 auto;
+}
+
+.margin-left {
+  margin-left: 1rem;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.button {
+  margin-left: 10px;
+  padding: 4px 8px;
+  background-color: #507e32;
+  border: 1px solid #70ad47;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+}
+
+.button:hover {
+  background-color: #99c184;
+}
+
+.monitoringData {
+  margin-top: 10px;
+}
+
+.monitoringPre {
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.calculateButton {
+  background-color: #507e32;
+  color: white;
+  padding: 10px 30px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 1.1em;
+  transition: background-color 0.2s;
+  border: 1px solid #70ad47;
+}
+
+.calculateButton:hover {
+  background-color: #99c184;
+}
