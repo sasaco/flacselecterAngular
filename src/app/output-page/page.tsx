@@ -11,8 +11,8 @@ export default function OutputPage(): ReactElement {
   const [inputString1, setInputString1] = useState<string>('');
   const [inputString2, setInputString2] = useState<string>('');
   const [inputString3, setInputString3] = useState<string>('');
-  const [imgString0, setImgString0] = useState<string>('');
-  const [imgString1, setImgString1] = useState<string>('');
+  const [imgString0, setImgString0] = useState<string | undefined>('');
+  const [imgString1, setImgString1] = useState<string | undefined>('');
   const [displacement, setDisplacement] = useState<number>(0);
   const [effection, setEffection] = useState<number>(0);
   const [alertString, setAlertString] = useState<string>('');
@@ -97,7 +97,7 @@ export default function OutputPage(): ReactElement {
     return result;
   };
 
-  const getImgString = (): [string, string] => {
+  const getImgString = (): [string | undefined, string | undefined] => {
     const getCaseStrings = (): string[] => {
       const tunnelType = data.tunnelKeizyo;
       const henkeiMode = data.henkeiMode;
@@ -117,9 +117,10 @@ export default function OutputPage(): ReactElement {
     };
 
     const caseStrings = getCaseStrings();
+    // Return undefined if strings are empty or undefined
     return [
-      `/images/${caseStrings[0]}.png`,
-      `/images/${caseStrings[1]}.png`
+      caseStrings[0] ? `/images/${caseStrings[0]}.png` : undefined,
+      caseStrings[1] ? `/images/${caseStrings[1]}.png` : undefined
     ];
   };
 
@@ -238,11 +239,11 @@ export default function OutputPage(): ReactElement {
           <div className={styles.images}>
             <div>
               <div>【対策工なし】</div>
-              <img id="outputimage" src={imgString0} alt="対策工なし" />
+              {imgString0 && <img id="outputimage" src={imgString0} alt="対策工なし" />}
             </div>
             <div>
               <div>【対策工あり】</div>
-              <img id="outputimage" src={imgString1} alt="対策工あり" />
+              {imgString1 && <img id="outputimage" src={imgString1} alt="対策工あり" />}
             </div>
           </div>
 
