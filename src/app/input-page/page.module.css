@@ -1,0 +1,124 @@
+.container {
+  padding: 20px;
+}
+
+.section-title {
+  margin-bottom: 20px;
+}
+
+.section-title h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.divider {
+  height: 2px;
+  background-color: #ccc;
+  margin: 10px 0;
+}
+
+.conditions {
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.liner {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  padding: 15px;
+}
+
+.formFieldset {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+
+.formLegend {
+  padding: 0 10px;
+  font-weight: bold;
+}
+
+.formLabel {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+}
+
+.formRadio {
+  margin-right: 8px;
+}
+
+.formNumber {
+  padding: 4px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.margin-left {
+  margin-left: 20px;
+}
+
+.Enable {
+  opacity: 1;
+}
+
+.Disable {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.pre {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 10px;
+  white-space: pre-wrap;
+}
+
+.fieldset {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+}
+
+.legend {
+  padding: 0 10px;
+  font-weight: bold;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+}
+
+.radio {
+  margin-right: 8px;
+}
+
+.number {
+  padding: 4px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
