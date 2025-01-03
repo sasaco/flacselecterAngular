@@ -37,14 +37,8 @@ export class OutputPageComponent implements OnInit {
     this.imgString0 = img[0];
 
     this.alertString = this.getalertString();
-    this.input.getEffectionNum().then(value => {
-      this.effection = value;
-      this.displacement = this.getDisplacement();
-    }).catch(error => {
-      console.error('Error getting effection number:', error);
-      this.effection = 0;
-      this.displacement = this.input.Data.naikuHeniSokudo;
-    });
+    this.effection = this.input.getEffectionNum();
+    this.displacement = this.getDisplacement();
   }
 
   getinputString1(): string{
