@@ -3,6 +3,7 @@
   "version": "2.1.1",
   "description": "調査・計測データに基づく対策工設計ツール",
   "homepage": "http://structuralengine.com",
+  "productName": "FLAC Selecter",
   "author": {
     "name": "sasaco",
     "email": "sasaicco@gmail.com"
