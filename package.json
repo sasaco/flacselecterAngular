@@ -22,7 +22,7 @@
     "build": "npm run postinstall:electron && npm run electron:serve-tsc && ng build",
     "build:dev": "npm run build -- -c dev",
     "build:prod": "npm run build -- -c production",
-    "build:web": "ng build --configuration production --base-href \"/\"",
+    "build:web": "ng build --configuration production --base-href \"/flacselecterAngular/\"",
     "ng:serve": "ng serve",
     "ng:serve:web": "npm run postinstall:web && ng serve -o",
     "electron:serve-tsc": "tsc -p tsconfig-serve.json",
