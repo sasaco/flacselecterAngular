@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { InputData } from './imput-data';
+import { InputData } from './input-data';
 import { ElectronService } from './electron.service';
 
 @Injectable({
