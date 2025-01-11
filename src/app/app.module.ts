@@ -7,10 +7,6 @@ import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/
 
 import { AppRoutingModule } from './app-routing.module';
 
-// NG Translate
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
 import { ElectronService } from './providers/electron.service';
 
 import { WebviewDirective } from './directives/webview.directive';
@@ -21,11 +17,6 @@ import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { InputDataService } from './providers/input-data.service';
 import { InputPageComponent } from './components/input-page/input-page.component';
 import { OutputPageComponent } from './components/output-page/output-page.component';
-
-// AoT requires an exported function for factories
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
 
 @NgModule({ declarations: [
         AppComponent,
@@ -38,14 +29,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     ], imports: [BrowserModule,
         FormsModule,
         ReactiveFormsModule,
-        AppRoutingModule,
-        TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: (HttpLoaderFactory),
-                deps: [HttpClient]
-            }
-        })], providers: [
+        AppRoutingModule
+    ], providers: [
         ElectronService,
         InputDataService,
         provideHttpClient(withInterceptorsFromDi())
