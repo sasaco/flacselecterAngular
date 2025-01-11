@@ -1,15 +1,13 @@
 {
   "name": "flac-selecter",
-  "version": "2.1.1",
+  "version": "3.0.0",
   "description": "調査・計測データに基づく対策工設計ツール",
-  "homepage": "http://structuralengine.com",
-  "author": {
-    "name": "sasaco",
-    "email": "sasaicco@gmail.com"
-  },
+  "homepage": "https://www.rtri.or.jp/rd/news/structure/2020/structure_202007.html",
+  "productName": "FLAC Selecter",
+  "author": "公益財団法人 鉄道総合技術研究所",
   "keywords": [
     "angular",
-    "angular 6",
+    "angular 18",
     "electron",
     "typescript",
     "sass"
@@ -20,7 +18,6 @@
     "postinstall": "npm run postinstall:electron && npx electron-builder install-app-deps",
     "postinstall:web": "node postinstall-web",
     "postinstall:electron": "node postinstall",
-    "ng": "ng",
     "start": "npm run postinstall:electron && npm-run-all -p ng:serve electron:serve",
     "build": "npm run postinstall:electron && npm run electron:serve-tsc && ng build",
     "build:dev": "npm run build -- -c dev",
@@ -30,12 +27,8 @@
     "electron:serve-tsc": "tsc -p tsconfig-serve.json",
     "electron:serve": "wait-on http-get://localhost:4200/ && npm run electron:serve-tsc && electron . --serve",
     "electron:local": "npm run build:prod && cross-env ELECTRON=true electron .",
-    "electron:linux": "npm run build:prod && npx electron-builder build --linux",
     "electron:windows": "npm run build:prod && npx electron-builder build --windows",
-    "electron:mac": "npm run build:prod && npx electron-builder build --mac",
-    "test": "npm run postinstall:web && ng test",
-    "e2e": "npm run postinstall:web && ng e2e",
-    "32bit": "npm run build --ia32 && npx electron-builder build --ia32 --windows"
+    "electron:win32bit": "npm run build --ia32 && npx electron-builder build --ia32 --windows"
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "^18.0.0",
@@ -50,8 +43,6 @@
     "@angular/platform-browser": "18.2.12",
     "@angular/platform-browser-dynamic": "18.2.12",
     "@angular/router": "18.2.12",
-    "@ngx-translate/core": "^14.0.0",
-    "@ngx-translate/http-loader": "^7.0.0",
     "@types/jasmine": "2.8.7",
     "@types/jasminewd2": "2.0.3",
     "@types/node": "^18.19.68",
