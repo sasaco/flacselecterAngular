@@ -1,9 +1,15 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
+    "module": "es2015",
+    "baseUrl": "",
     "sourceMap": true,
     "esModuleInterop": true,
+    
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    
+    "resolveJsonModule": true,
     "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
@@ -23,5 +29,6 @@
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "compileOnSave": false
 }

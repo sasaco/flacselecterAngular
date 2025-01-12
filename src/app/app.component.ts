@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { ElectronService } from './providers/electron.service';
-import { TranslateService } from '@ngx-translate/core';
 import { AppConfig } from '../environments/environment';
-
+import packageJson from '../../package.json';
 
 @Component({
     selector: 'app-root',
@@ -11,11 +10,12 @@ import { AppConfig } from '../environments/environment';
     standalone: false
 })
 export class AppComponent {
-  constructor(public electronService: ElectronService,
-    private translate: TranslateService) {
+  
+  public version: string;
 
-    translate.setDefaultLang('en');
-    console.log('AppConfig', AppConfig);
+  constructor(public electronService: ElectronService) {
+
+    this.version = packageJson.version;
 
     if (electronService.isElectron()) {
       console.log('Mode electron');

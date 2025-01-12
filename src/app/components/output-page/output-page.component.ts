@@ -11,16 +11,16 @@ import { fromEventPattern } from 'rxjs';
   
 export class OutputPageComponent implements OnInit {
   
-  inputString1: string;
-  inputString2: string;
-  inputString3: string;
-  imgString1: string;
-  imgString0: string;
-  alertString: string;
+  public inputString1: string | null = null;
+  public inputString2: string | null = null;
+  public inputString3: string | null = null;
+  public imgString1: string | null = null;
+  public imgString0: string | null = null;
+  public alertString: string | null = null;
 
-  csvfrm: string;
-  effection: number;
-  displacement: number;
+  public csvfrm: string | null = null;
+  public effection: number = 0;
+  public displacement: number = 0;
 
   constructor(private input: InputDataService) {}
 
@@ -42,7 +42,7 @@ export class OutputPageComponent implements OnInit {
   }
 
   getinputString1(): string{
-    let result: string;
+    let result: string = "";
     switch (this.input.Data.tunnelKeizyo) {
       case 1:
         result = "単線";
@@ -143,7 +143,7 @@ export class OutputPageComponent implements OnInit {
     return result;
   }
 
-  getalertString(): string{
+  getalertString(): string | null {
     let makiatsu: number = this.input.Data.fukukouMakiatsu;
     let kyodo: number = this.input.Data.jiyamaKyodo;
     if (this.input.Data.tunnelKeizyo < 3) { // 単線, 複線

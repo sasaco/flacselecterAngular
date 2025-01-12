@@ -11,7 +11,7 @@ import * as fs from 'fs';
 @Injectable()
 export class ElectronService {
 
-  electron: {
+  public electron!: {
     ipcRenderer: {
       send: (channel: string, data?: any) => void;
       sendSync: (channel: string, data?: any) => any;

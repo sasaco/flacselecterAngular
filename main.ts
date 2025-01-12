@@ -1,15 +1,16 @@
-import { app, Menu, BrowserWindow, screen, ipcMain, shell, contextBridge, ipcRenderer } from 'electron';
-import * as path from 'path';
-import * as url from 'url';
-import * as fs from 'fs';
+const { app, Menu, BrowserWindow, ipcMain, shell } = require('electron');
+const path = require('path');
+const url = require('url');
+const fs = require('fs');
 
-let win, serve;
+let win: any;
+let serve: boolean;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
 function createWindow() {
 
-  const electronScreen = screen;
+  // const electronScreen = screen;
   const size = { width: 1024, height: 848 };//electronScreen.getPrimaryDisplay().workAreaSize;
 
   // Create the browser window.
@@ -43,7 +44,7 @@ function createWindow() {
       label: "メニュー",
       submenu: [
         { label: "Print", click: () => print_to_pdf() },
-        { label: "Debug", click: () => win.webContents.openDevTools() }
+        { label: "Debug", click: () =>  win.webContents.openDevTools() }
       ]
     }
   ];
@@ -106,13 +107,14 @@ function print_to_pdf() :void {
 
   const pdfPath = path.join(__dirname, 'print.pdf')
 
-  win.webContents.printToPDF({}, function (error, data) {
-    if (error) throw error
-    fs.writeFile(pdfPath, data, function (error) {
-      if (error) {
-        throw error
-      }
-      shell.openExternal('file://' + pdfPath)
-    })
-  })
+  win.webContents.printToPDF({});
+  // win.webContents.printToPDF({}, (error, data) => {
+  //   if (error) throw error
+  //   fs.writeFile(pdfPath, data, function (error) {
+  //     if (error) {
+  //       throw error
+  //     }
+  //     shell.openExternal('file://' + pdfPath)
+  //   })
+  // })
 }

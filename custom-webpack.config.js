@@ -3,6 +3,7 @@ const isElectron = process.env.ELECTRON === 'true';
 
 module.exports = {
   target: isElectron ? 'electron-renderer' : 'web',
+  devtool: 'source-map',
   node: {
     global: true,
     __dirname: false,
