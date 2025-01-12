@@ -3,7 +3,7 @@ const path = require('path');
 const url = require('url');
 const fs = require('fs');
 
-let win: Electron.CrossProcessExports.BrowserWindow | null;
+let win: any;
 let serve: boolean;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
@@ -44,10 +44,7 @@ function createWindow() {
       label: "メニュー",
       submenu: [
         { label: "Print", click: () => print_to_pdf() },
-        { label: "Debug", click: () => {
-          if(win)
-            win.webContents.openDevTools()
-        }}
+        { label: "Debug", click: () =>  win.webContents.openDevTools() }
       ]
     }
   ];
@@ -60,8 +57,6 @@ function createWindow() {
     // Dereference the window object, usually you would store window
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    if(win)
-      win.destroy();
     win = null;
   });
 
@@ -111,9 +106,6 @@ ipcMain.on('read-csv-file', function(event) {
 function print_to_pdf() :void {
 
   const pdfPath = path.join(__dirname, 'print.pdf')
-
-  if(!win)
-    return;
 
   win.webContents.printToPDF({});
   // win.webContents.printToPDF({}, (error, data) => {
