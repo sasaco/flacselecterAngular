@@ -25,7 +25,7 @@
     "ng:serve": "ng serve",
 
     "start": "npm run postinstall:electron && npm-run-all -p ng:serve electron:serve",
-    "start:web": "npm run postinstall:web && ng serve",
+    "start:web": "npm run postinstall:web && ng serve --configuration=dev",
 
     "build:windows": "npm run build:prod && npx electron-builder build --windows",
     "build:web": "ng build --configuration production --base-href \"/flacselecterAngular/\""
