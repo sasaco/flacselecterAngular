@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-
+    "outDir": "./dist",
     "sourceMap": true,
 
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
     "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
