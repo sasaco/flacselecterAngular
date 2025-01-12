@@ -1,16 +1,16 @@
 export class InputData{
-    tunnelKeizyo: number
-    fukukouMakiatsu: number
-    invert: number
-    haimenKudo: number
-    henkeiMode: number
-    jiyamaKyodo: number
-    naikuHeniSokudo: number
-    uragomeChunyuko: number
-    lockBoltKou: number
-    lockBoltLength: number
-    downwardLockBoltKou: number
-    downwardLockBoltLength: number
-    uchimakiHokyo: number
-    MonitoringData: string
+    tunnelKeizyo: number = 1
+    fukukouMakiatsu: number = 30
+    invert: number = 0
+    haimenKudo: number = 0
+    henkeiMode: number = 1
+    jiyamaKyodo: number = 2
+    naikuHeniSokudo: number = 0
+    uragomeChunyuko: number = 0
+    lockBoltKou: number = 0
+    lockBoltLength: number = 3
+    downwardLockBoltKou: number = 0
+    downwardLockBoltLength: number = 4
+    uchimakiHokyo: number = 0
+    MonitoringData: string = ''
 }

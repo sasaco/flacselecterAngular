@@ -18,18 +18,17 @@
     "postinstall": "npm run postinstall:electron && npx electron-builder install-app-deps",
     "postinstall:web": "node postinstall-web",
     "postinstall:electron": "node postinstall",
-    "start": "npm run postinstall:electron && npm-run-all -p ng:serve electron:serve",
     "build": "npm run postinstall:electron && npm run electron:serve-tsc && ng build",
-    "build:dev": "npm run build -- -c dev",
     "build:prod": "npm run build -- -c production",
-    "build:web": "ng build --configuration production --base-href \"/flacselecterAngular/\"",
-    "ng:serve": "ng serve",
-    "ng:serve:web": "npm run postinstall:web && ng serve -o",
     "electron:serve-tsc": "tsc -p tsconfig-serve.json",
     "electron:serve": "wait-on http-get://localhost:4200/ && npm run electron:serve-tsc && electron . --serve",
-    "electron:local": "npm run build:prod && cross-env ELECTRON=true electron .",
-    "electron:windows": "npm run build:prod && npx electron-builder build --windows",
-    "electron:win32bit": "npm run build --ia32 && npx electron-builder build --ia32 --windows"
+    "ng:serve": "ng serve",
+
+    "start": "npm run postinstall:electron && npm-run-all -p ng:serve electron:serve",
+    "start:web": "npm run postinstall:web && ng serve",
+
+    "build:windows": "npm run build:prod && npx electron-builder build --windows",
+    "build:web": "ng build --configuration production --base-href \"/flacselecterAngular/\""
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "^18.0.0",

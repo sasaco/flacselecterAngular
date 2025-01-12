@@ -7,27 +7,12 @@ import { ElectronService } from './electron.service';
 })
 export class InputDataService {
 
-  public Data: InputData = {
-    tunnelKeizyo: 1,
-    fukukouMakiatsu: 30,
-    invert: 0,
-    haimenKudo: 0,
-    henkeiMode: 1,
-    jiyamaKyodo: 2,
-    naikuHeniSokudo: 0,
-    uragomeChunyuko: 0,
-    lockBoltKou: 0,
-    lockBoltLength: 3,
-    downwardLockBoltKou: 0,
-    downwardLockBoltLength: 4,
-    uchimakiHokyo: 0,
-    MonitoringData: ''
-  }
+  public Data = new InputData();
 
-  private data: any;
+  private _data: any;
 
   constructor(private electronService: ElectronService) {
-    this.data = new Array();
+    this._data = new Array();
     
     if (this.electronService.isElectron()) {
       // Only use ipcRenderer in electron environment
@@ -67,8 +52,10 @@ export class InputDataService {
       console.error('Empty CSV text provided to parser');
       return;
     }
+    console.log(arg);
     const tmp = arg.split("\n");
-    for (let i: number = 1; i < tmp.length; ++i) {
+    let i: number = 0;
+    for (i = 1; i < tmp.length; ++i) {
       try {
         const line = tmp[i].split(',');
 
@@ -87,9 +74,13 @@ export class InputDataService {
           list.push(line[j]);
         }
 
-        this.data.push(list);
+        this._data.push(list);
       } catch (e) {
         console.log(e);
+        console.log("-------");
+        console.log(`i=${i}`);
+        console.log(tmp[i]);
+        console.log("-------");
       }
       
     }
@@ -219,8 +210,8 @@ export class InputDataService {
     let crrentData: number[][] = [[-1.0, -1.0], [-1.0, -1.0]];
     let counter: number = 0;
 
-    for (let index = 0; index < this.data.length; index++) {
-      const row = this.data[index];
+    for (let index = 0; index < this._data.length; index++) {
+      const row = this._data[index];
       let crrent: string = row[1]; 
 
       // 内空変位速度
@@ -228,28 +219,28 @@ export class InputDataService {
 
       if (CaseStrings[0] === crrent) {
         // 同じデータが見つかったら それを返す
-        return getEffection(this.data, index, naikuHeniSokudo);
+        return getEffection(this._data, index, naikuHeniSokudo);
       }
       //任意の数値の 巻厚, 地盤強度 以外の入力が同じデータを探す
       if (CaseStrings[3] === crrent) {
-        crrentData[0][0] = getEffection(this.data, index, naikuHeniSokudo);
+        crrentData[0][0] = getEffection(this._data, index, naikuHeniSokudo);
         counter++;
       }
       if (CaseStrings[4] === crrent) {
-        crrentData[1][0] = getEffection(this.data, index, naikuHeniSokudo);
+        crrentData[1][0] = getEffection(this._data, index, naikuHeniSokudo);
         counter++;
       }
       if (CaseStrings[5] === crrent) {
-        crrentData[0][1] = getEffection(this.data, index, naikuHeniSokudo);
+        crrentData[0][1] = getEffection(this._data, index, naikuHeniSokudo);
         counter++;
       }
       if (CaseStrings[6] === crrent) {
-        crrentData[1][1] = getEffection(this.data, index, naikuHeniSokudo);
+        crrentData[1][1] = getEffection(this._data, index, naikuHeniSokudo);
         counter++;
       }
     }
     if (counter < 4) {
-      return null;
+      return 0;
     }
 
     const temp1: number = (crrentData[1][0] - crrentData[0][0]) * this.Data.fukukouMakiatsu / 30 + 2 * crrentData[0][0] - crrentData[1][0];

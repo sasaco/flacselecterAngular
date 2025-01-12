@@ -12,31 +12,31 @@ import { InputDataService } from '../../providers/input-data.service';
 export class InputPageComponent implements OnInit {
 
   // トンネル形状
-  tunnelKeizyoList = [
+  public tunnelKeizyoList = [
     { id: 1, title: '単線' },
     { id: 2, title: '複線' },
     { id: 3, title: '新幹線（在来工法）' },
   ];
 
   // 覆工巻厚
-  tempFukukouMakiatsu: string;
+  public tempFukukouMakiatsu: string | null = null;
 
   // インバートの有無
-  invertList = [
+  public invertList = [
     { id: 0, title: 'なし' },
     { id: 1, title: 'あり' }
   ];
 
   // 背面空洞の有無
-  haimenKudoList = [
+  public haimenKudoList = [
     { id: 0, title: 'なし' },
     { id: 1, title: 'あり' }
   ];
 
   // 変形モード
-  henkeiMode4Flag: boolean; // 盤ぶくれモードかどうか
-  henkeiModeStyle: string[];
-  henkeiModeList = [
+  public henkeiMode4Flag: boolean | null = null; // 盤ぶくれモードかどうか
+  public henkeiModeStyle: string[] | null = null;
+  public henkeiModeList = [
     { id: 1, title: '側壁全体押出し' },
     { id: 2, title: '側壁上部前傾' },
     { id: 3, title: '脚部押出し' },
@@ -44,23 +44,23 @@ export class InputPageComponent implements OnInit {
   ];
 
   // 地山強度
-  tempJiyamaKyodo: string;
+  public tempJiyamaKyodo: string | null = null;
 
   // 内空変位速度
-  tempNaikuHeniSokudo: string;
+  public tempNaikuHeniSokudo: string | null = null;
   
   // モニタリングデータ
-  tempMonitoringData: string;
+  public tempMonitoringData: string | null = null;
 
   // 裏込注入工
-  uragomeChunyukoStyle: string[];
-  uragomeChunyukoList = [
+  public uragomeChunyukoStyle: string[] | null = null;
+  public uragomeChunyukoList = [
     { id: 0, title: 'なし' },
     { id: 1, title: 'あり' }
   ];
 
   // ロックボルト工
-  lockBoltKouList = [
+  public lockBoltKouList = [
     { id: 0, title: 'なし' },
     { id: 4, title: '4本' },
     { id: 8, title: '8本' },
@@ -68,8 +68,8 @@ export class InputPageComponent implements OnInit {
   ];
 
   // ロックボルト長さ
-  lockBoltLengthStyle: string[];
-  lockBoltLengthList = [
+  public lockBoltLengthStyle: string[] | null = null;
+  public lockBoltLengthList = [
     { id: 3, title: '3m' },
     { id: 6, title: '6m' },
     { id: 4, title: '4m' },
@@ -78,22 +78,22 @@ export class InputPageComponent implements OnInit {
 
 
   // （下向き）ロックボルト工
-  downwardLockBoltEnable: boolean; 
-  downwardLockBoltKouList = [
+  public downwardLockBoltEnable: boolean | null = null; 
+  public downwardLockBoltKouList = [
     { id: 0, title: 'なし' },
     { id: 4, title: '4本' },
     { id: 6, title: '6本' }
   ];
 
   // （下向き）ロックボルト長さ
-  downwardLockBoltLengthStyle: string;
-  downwardLockBoltLengthList = [
+  public downwardLockBoltLengthStyle: string | null = null;
+  public downwardLockBoltLengthList = [
     { id: 4, title: '4m' },
     { id: 8, title: '8m' }
   ];
 
   // 内巻補強
-  uchimakiHokyoList = [
+  public uchimakiHokyoList = [
     { id: 0, title: 'なし' },
     { id: 1, title: 'あり' }
   ];
@@ -112,7 +112,9 @@ export class InputPageComponent implements OnInit {
   }
   
   ngOnDestroy() {
-    this.input.Data.MonitoringData = this.tempMonitoringData;
+    if(this.tempMonitoringData) {
+      this.input.Data.MonitoringData = this.tempMonitoringData;
+    }
   }
 
   // 入力状況に合わせて有効無効を変える
