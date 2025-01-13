@@ -17,10 +17,10 @@ export class AppComponent {
 
     this.version = packageJson.version;
 
-    if (electronService.isElectron()) {
+    if (electronService.isElectron) {
       console.log('Mode electron');
-      console.log('Electron ipcRenderer', electronService.electron.ipcRenderer);
-      console.log('NodeJS childProcess', electronService.electron.childProcess);
+      console.log('Electron ipcRenderer', electronService.ipcRenderer);
+      console.log('NodeJS childProcess', electronService.childProcess);
     } else {
       console.log('Mode web');
     }
