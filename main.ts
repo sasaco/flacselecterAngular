@@ -113,7 +113,7 @@ function print_to_pdf() :void {
       fs.writeFile(pdfPath, data, (error) => {
         if (error) throw error
         console.log('Write PDF successfully.')
-        shell.openExternal('file://' + pdfPath)
+        shell.openExternal(`file://${pdfPath}`)
       })
     }).catch(error => {
       throw error
