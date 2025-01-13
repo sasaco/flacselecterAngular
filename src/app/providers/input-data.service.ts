@@ -14,9 +14,9 @@ export class InputDataService {
   constructor(private electronService: ElectronService) {
     this._data = new Array();
     
-    if (this.electronService.isElectron()) {
+    if (this.electronService.isElectron) {
       // Only use ipcRenderer in electron environment
-      const arg = this.electronService.electron.ipcRenderer.sendSync('read-csv-file');
+      const arg = this.electronService.ipcRenderer.sendSync('read-csv-file');
       if (arg) {
         console.log('CSV data loaded successfully');
         this.parseCSVData(arg);

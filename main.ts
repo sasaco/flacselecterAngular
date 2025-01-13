@@ -1,14 +1,13 @@
-const { app, Menu, BrowserWindow, ipcMain, shell } = require('electron');
-const path = require('path');
-const url = require('url');
-const fs = require('fs');
+import {app, Menu, BrowserWindow, ipcMain, screen} from 'electron';
+import * as path from 'path';
+import * as url from 'url';
+import * as fs from 'fs';
 
-let win: any;
-let serve: boolean;
+let win: BrowserWindow | null = null;
 const args = process.argv.slice(1);
-serve = args.some(val => val === '--serve');
+let serve: boolean = args.some(val => val === '--serve');
 
-function createWindow() {
+function createWindow(): BrowserWindow {
 
   // const electronScreen = screen;
   const size = { width: 1024, height: 848 };//electronScreen.getPrimaryDisplay().workAreaSize;
@@ -20,9 +19,9 @@ function createWindow() {
     width: size.width,
     height: size.height,
     webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true,
-      // preload: path.join(__dirname, 'preload.js')
+      nodeIntegration: true,
+      allowRunningInsecureContent: (serve),
+      contextIsolation: false,
     }
   });
 
@@ -45,7 +44,7 @@ function createWindow() {
       label: "メニュー",
       submenu: [
         { label: "Print", click: () => print_to_pdf() },
-        { label: "Debug", click: () =>  win.webContents.openDevTools() }
+        { label: "Debug", click: () => { if (win) win.webContents.openDevTools(); } }
       ]
     }
   ];
@@ -60,7 +59,8 @@ function createWindow() {
     // when you should delete the corresponding element.
     win = null;
   });
-
+  
+  return win;
 }
 
 try {
@@ -106,16 +106,17 @@ ipcMain.on('read-csv-file', (event: any) => {
 
 function print_to_pdf() :void {
 
-  const pdfPath = path.join(__dirname, 'print.pdf')
-
-  win.webContents.printToPDF({});
-  // win.webContents.printToPDF({}, (error, data) => {
-  //   if (error) throw error
-  //   fs.writeFile(pdfPath, data, function (error) {
-  //     if (error) {
-  //       throw error
-  //     }
-  //     shell.openExternal('file://' + pdfPath)
-  //   })
-  // })
+  if (win) {
+    win.webContents.printToPDF({});
+    // const pdfPath = path.join(__dirname, 'print.pdf')
+    // win.webContents.printToPDF({}, (error, data) => {
+    //   if (error) throw error
+    //   fs.writeFile(pdfPath, data, function (error) {
+    //     if (error) {
+    //       throw error
+    //     }
+    //     shell.openExternal('file://' + pdfPath)
+    //   })
+    // })
+  }
 }
