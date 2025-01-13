@@ -1,4 +1,4 @@
-import {app, Menu, BrowserWindow, ipcMain, screen} from 'electron';
+import {app, Menu, BrowserWindow, ipcMain, shell} from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as fs from 'fs';
@@ -107,16 +107,16 @@ ipcMain.on('read-csv-file', (event: any) => {
 function print_to_pdf() :void {
 
   if (win) {
-    win.webContents.printToPDF({});
-    // const pdfPath = path.join(__dirname, 'print.pdf')
-    // win.webContents.printToPDF({}, (error, data) => {
-    //   if (error) throw error
-    //   fs.writeFile(pdfPath, data, function (error) {
-    //     if (error) {
-    //       throw error
-    //     }
-    //     shell.openExternal('file://' + pdfPath)
-    //   })
-    // })
+    win.webContents.printToPDF({
+    }).then(data => {
+      const pdfPath = path.join(__dirname, 'print.pdf')
+      fs.writeFile(pdfPath, data, (error) => {
+        if (error) throw error
+        console.log('Write PDF successfully.')
+        shell.openExternal('file://' + pdfPath)
+      })
+    }).catch(error => {
+      throw error
+    })
   }
 }

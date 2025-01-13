@@ -7,17 +7,13 @@
   "main": "main.js",
   "scripts": {
     "postinstall": "npx electron-builder install-app-deps",
-    "electron:build": "tsc -p tsconfig.electron.json && ng build --base-href ./",
-    
-    "start": "npm run build:dev && npm-run-all -p start:web electron:serve",
-      "build:dev": "npm run electron:build -- -c dev",
-      "electron:serve": "wait-on tcp:4200 && npx electron . --serve",
-    
+    "electron:build": "npm run electron:tsc && ng build --base-href ./",
+    "electron:tsc": "tsc -p tsconfig.electron.json",
+    "start": "npm run electron:tsc && npm-run-all -p start:web electron:serve",
+    "electron:serve": "wait-on tcp:4200 && npx electron . --serve",
     "build": "npm run build:prod && npx electron-builder build",
-      "build:prod": "npm run electron:build -- -c production",
-
+    "build:prod": "npm run electron:build -- -c production",
     "start:web": "ng serve -c dev",
-      
     "build:web": "ng build -c production --base-href \"/flacselecterAngular/\""
   },
   "dependencies": {
