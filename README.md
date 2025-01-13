@@ -1,4 +1,4 @@
-## Electron のメインプロセスをデバッグ
+## Electron をデバッグ
 
 ### 1. Angularを起動
 ```bash
@@ -12,7 +12,9 @@ http://localhost:4200 で待機します。
 **Debug with Electron** を実行
 
 
-## Angular のレンダープロセスをデバッグ
+
+
+## Angular をデバッグ
 
 ### 1. Angularを起動
 ```bash
@@ -26,16 +28,23 @@ http://localhost:4200 で待機します。
 **Debug with Chrome** を実行
 
 
+
+
 ## Electronアプリを実行（デバッグ無し）
 ```bash
 npm run start
 ```
+
+
+
 
 ## Electronアプリのインストーラーを作成
 ```bash
 npm run build
 ```
 `./release` フォルダに出力されます。
+
+
 
 
 ## Webアプリをビルド
