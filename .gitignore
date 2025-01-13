@@ -3,25 +3,13 @@
 # compiled output
 /dist
 /tmp
-/out-tsc
-/app-builds
 /release
-main.js
-src/**/*.js
+*.js
 *.js.map
 print.pdf
 
 # dependencies
 /node_modules
-
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
 
 # IDE - VSCode
 .vscode/*
@@ -31,19 +19,7 @@ print.pdf
 !.vscode/extensions.json
 
 # misc
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-npm-debug.log
-testem.log
-/typings
 package-lock.json
-
-# e2e
-/e2e/*.js
-!/e2e/protractor.conf.js
-/e2e/*.map
 
 # System Files
 .DS_Store
