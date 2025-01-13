@@ -2,6 +2,7 @@
   "name": "flac-selecter",
   "version": "3.0.0",
   "private": true,
+  "main": "main.js",
   "scripts": {
     "postinstall": "npx electron-builder install-app-deps",
     "ng": "ng",
@@ -10,8 +11,8 @@
 
     "start": "npm run electron:dev && npm-run-all -p electron:serve start:web",
       "electron:dev": "npm run build:dev && electron-builder build --publish=never",
-        "build:dev": "npm run electron:build -- -c dev",
-      "electron:serve": "wait-on tcp:4200 && npm run tsc:build && electron electron/main.js",
+        "build:dev": "ng build -c dev && npm run electron:build -- -c dev",
+      "electron:serve": "wait-on tcp:4200 && npm run tsc:build && electron main.js",
 
     "start:web": "ng serve -c dev",
 

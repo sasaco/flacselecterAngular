@@ -9,10 +9,10 @@
     "node"
   ],
   "files": [
-    "electron/main.ts"
+    "main.ts"
   ],
   "include": [
-    "electron/main.ts",
+    "main.ts",
     "src/**/*.d.ts"
   ]
 }
