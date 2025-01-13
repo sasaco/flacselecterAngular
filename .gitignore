@@ -5,6 +5,7 @@
 /tmp
 /release
 *.js
+!tailwind.config.js
 *.js.map
 print.pdf
 
