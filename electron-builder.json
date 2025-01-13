@@ -3,31 +3,24 @@
     "output": "release/"
   },
   "files": [
-    "**/*",
-    "!**/*.ts",
-    "!*.map",
-    "!package.json",
-    "!package-lock.json",
-    {
-      "from": "../dist",
-      "filter": ["**/*"]
-    }
+    "dist/",
+    "main.js"
   ],
   "win": {
-    "icon": "dist/assets/icons",
+    "icon": "src/assets/icons/favicon.256x256.png",
     "target": [
       "nsis"
     ],
     "asar": false
   },
   "mac": {
-    "icon": "dist/assets/icons",
+    "icon": "src/assets/icons/favicon.256x256.png",
     "target": [
       "dmg"
     ]
   },
   "linux": {
-    "icon": "dist/assets/icons",
+    "icon": "src/assets/icons/favicon.256x256.png",
     "target": [
       "AppImage"
     ]
