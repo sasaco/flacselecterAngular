@@ -1,5 +1,11 @@
 {
     "version": "0.2.0",
+    "compounds": [
+      {
+        "name": "Debug with Electron",
+        "configurations": ["Launch Electron", "Attach to Renderer"]
+      }
+    ],
     "configurations": [
         {
             "name": "Debug with Chrome",
@@ -7,17 +13,10 @@
             "request": "launch",
             "url": "http://localhost:4200",
             "webRoot": "${workspaceFolder}",
-            "sourceMaps": true,
-            "sourceMapPathOverrides": {
-                "webpack:/*": "${webRoot}/*",
-                "/./*": "${webRoot}/*",
-                "/src/*": "${webRoot}/src/*",
-                "/*": "*",
-                "/./~/*": "${webRoot}/node_modules/*"
-            }
+            "sourceMaps": true
         },
         {
-            "name": "Debug with Electron",
+            "name": "Launch Electron",
             "type": "node",
             "request": "launch",
             "cwd": "${workspaceRoot}",
@@ -28,7 +27,7 @@
             "program": "${workspaceRoot}/main.js",
             "sourceMaps": true,
             "outFiles": ["${workspaceRoot}/main.js"],
-            "args": ["--serve"]
+            "args": ["--serve", "--remote-debugging-port=9222"]
         },
         {
             "name": "Attach to Renderer",
