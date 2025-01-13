@@ -1,40 +1,40 @@
 <div>
   <div class="px-8">
     <div class="mt-4">
-      <div class="space-y-2">
+      <div class="space-y-0">
         <div class="flex">
-          <div class="w-36 text-justify mr-2">構造条件</div>:
+          <div class="w-[9rem] text-justify text-justify-last mr-2">構造条件</div>:
           <div class="ml-4">{{inputString1}}</div>
         </div>
         <div class="flex">
-          <div class="w-36 text-justify mr-2">調査・計測結果</div>:
+          <div class="w-[9rem] text-justify text-justify-last mr-2">調査・計測結果</div>:
           <div class="ml-4">{{inputString2}}</div>
         </div>
         <div class="flex">
-          <div class="w-36 text-justify mr-2">対策工条件</div>:
+          <div class="w-[9rem] text-justify text-justify-last mr-2">対策工条件</div>:
           <div class="ml-4">{{inputString3}}
           </div>
         </div>
       </div>
 
-      <div class="flex my-8 space-x-8">
-        <div>
+      <div class="flex mt-8 mb-8">
+        <div class="mr-8">
           <div>対策後の予測内空変位速度</div>
           <div class="flex items-end mx-4">
-            <span class="border border-black text-2xl px-4 py-2 mr-2">{{displacement}}</span>
+            <span class="border border-black text-[1.5rem] px-4 py-2 mr-2">{{displacement}}</span>
             mm/年
           </div>
         </div>
         <div>
           <div>変位抑制効果</div>
           <div class="flex items-end mx-4">
-            <span class="border border-black text-2xl px-4 py-2 mr-2">{{effection}}</span>％
+            <span class="border border-black text-[1.5rem] px-4 py-2 mr-2">{{effection}}</span>％
           </div>
         </div>
       </div>
 
-      <div class="flex space-x-4">
-        <div>
+      <div class="flex mb-4">
+        <div class="mr-4">
           <div>【対策工なし】</div>
           <img class="w-[350px] h-[350px] object-cover object-[-116px]" src="{{imgString0}}" />
         </div>
