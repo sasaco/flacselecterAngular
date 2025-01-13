@@ -5,7 +5,6 @@ import { fromEventPattern } from 'rxjs';
 @Component({
     selector: 'app-output-page',
     templateUrl: './output-page.component.html',
-    styleUrls: ['./output-page.component.scss'],
     standalone: false
 })
   

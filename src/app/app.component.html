@@ -1,8 +1,8 @@
-<div class="header">
-    <div class="container">
-        <div class="liner">
-            <img src="./assets/icons/logo.png" alt="logo" />
-            <div class="title-and-version">
+<div class="my-4">
+    <div class="px-8">
+        <div class="flex items-center">
+            <img src="./assets/icons/logo.png" alt="logo" class="w-12 mr-4" />
+            <div class="flex justify-between items-end flex-1 border-b border-border-green px-2">
                 <h1>変状対策工設計ツール</h1>
                 <div>Ver.{{version}}</div>
             </div>
@@ -10,11 +10,11 @@
     </div>
 </div>
 <div>
-    <div class="container">
-        <div class="page-selector">
+    <div class="px-8">
+        <div class="flex cursor-pointer text-lg mt-4">
             <nav>
-                <a routerLink="./input-page" routerLinkActive = "is-active">条件の設定</a>
-                <a routerLink="./output-page" routerLinkActive = "is-active">結果</a>
+                <a routerLink="./input-page" routerLinkActive="bg-primary-light text-white" class="flex h-[32px] w-[150px] p-[10px] mr-1 text-[khaki] bg-primary justify-center no-underline float-left">条件の設定</a>
+                <a routerLink="./output-page" routerLinkActive="bg-primary-light text-white" class="flex h-[32px] w-[150px] p-[10px] mr-1 text-[khaki] bg-primary justify-center no-underline float-left">結果</a>
             </nav>
         </div>
     </div>

@@ -1,50 +1,50 @@
 <div>
-  <div class="container">
-    <div class="result">
-      <div class="conditions-summary">
-        <div class="line">
-          <div class="condition-name">構造条件</div>:
-          <div class="content">{{inputString1}}</div>
+  <div class="px-8">
+    <div class="mt-4">
+      <div class="space-y-2">
+        <div class="flex">
+          <div class="w-36 text-justify mr-2">構造条件</div>:
+          <div class="ml-4">{{inputString1}}</div>
         </div>
-        <div class="line">
-          <div class="condition-name">調査・計測結果</div>:
-          <div class="content">{{inputString2}}</div>
+        <div class="flex">
+          <div class="w-36 text-justify mr-2">調査・計測結果</div>:
+          <div class="ml-4">{{inputString2}}</div>
         </div>
-        <div class="line">
-          <div class="condition-name">対策工条件</div>:
-          <div class="content">{{inputString3}}
+        <div class="flex">
+          <div class="w-36 text-justify mr-2">対策工条件</div>:
+          <div class="ml-4">{{inputString3}}
           </div>
         </div>
       </div>
 
-      <div class="result-numbers">
+      <div class="flex my-8 space-x-8">
         <div>
           <div>対策後の予測内空変位速度</div>
-          <div class="number">
-            <span class="number-box">{{displacement}}</span>
+          <div class="flex items-end mx-4">
+            <span class="border border-black text-2xl px-4 py-2 mr-2">{{displacement}}</span>
             mm/年
           </div>
         </div>
         <div>
           <div>変位抑制効果</div>
-          <div class="number">
-            <span class="number-box">{{effection}}</span>％
+          <div class="flex items-end mx-4">
+            <span class="border border-black text-2xl px-4 py-2 mr-2">{{effection}}</span>％
           </div>
         </div>
       </div>
 
-      <div class="images">
+      <div class="flex space-x-4">
         <div>
           <div>【対策工なし】</div>
-          <img id="outputimage" src="{{imgString0}}" />
+          <img class="w-[350px] h-[350px] object-cover object-[-116px]" src="{{imgString0}}" />
         </div>
 
         <div>
           <div>【対策工あり】</div>
-          <img id="outputimage" src="{{imgString1}}" />
+          <img class="w-[350px] h-[350px] object-cover object-[-116px]" src="{{imgString1}}" />
         </div>
       </div>
-      <div class='alert'>
+      <div class="text-[#aa0000]">
         <div>{{alertString}}</div>
       </div>
     </div>
