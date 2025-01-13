@@ -1,34 +1,22 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
-    "outDir": "./dist/out-tsc",
-    "module": "es2015",
     "baseUrl": "",
-    "sourceMap": true,
-    "esModuleInterop": true,
-    
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    
-    "resolveJsonModule": true,
-    "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
+    "outDir": "./dist",
+    "strict": true,   // 厳格な型チェックを有効にする設定です。
+    "esModuleInterop": true, // require を使わずに import 文を使ってモジュールをインポートすることができます。
+    "sourceMap": true, // ソースマップは、コンパイルされた JavaScript コードと元の TypeScript コードを関連付けるためのファイルです
+    "declaration": false, // TypeScript のコンパイラオプションの一つで、型定義ファイル（.d.ts ファイル）の生成を無効にする設定です。
+    "moduleResolution": "node", // 、TypeScript がインポートされたモジュールをどのように見つけるかを決定します。node:node_modules ディレクトリを検索
     "target": "ES2022",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "module": "ES2022",
     "lib": [
       "ES2022",
       "dom"
-    ]
+    ],   
+    "resolveJsonModule": true, // JSON ファイルをモジュールとしてインポートできるようにする設定です。
   },
-  "include": [
-    "main.ts",
-    "src/**/*"
-  ],
   "exclude": [
     "node_modules"
-  ],
-  "compileOnSave": false
+  ]
 }

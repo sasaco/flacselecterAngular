@@ -23,7 +23,7 @@
             "windows": {
                 "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
             },
-            "program": "${workspaceRoot}/dist/shell.js"
+            "program": "${workspaceRoot}/main.js"
         }
     ]
 }

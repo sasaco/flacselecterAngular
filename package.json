@@ -2,39 +2,25 @@
   "name": "flac-selecter",
   "version": "3.0.0",
   "description": "調査・計測データに基づく対策工設計ツール",
-  "homepage": "https://www.rtri.or.jp/rd/news/structure/2020/structure_202007.html",
-  "productName": "FLAC Selecter",
   "author": "公益財団法人 鉄道総合技術研究所",
-  "keywords": [
-    "angular",
-    "angular 18",
-    "electron",
-    "typescript",
-    "sass"
-  ],
-  "main": "main.js",
   "private": true,
+  "main": "main.js",
   "scripts": {
-    "postinstall": "npm run postinstall:electron && npx electron-builder install-app-deps",
-    "postinstall:web": "node postinstall-web",
-    "postinstall:electron": "node postinstall",
+    "postinstall": "npx electron-builder install-app-deps",
+    "electron:build": "tsc -p tsconfig.electron.json && ng build --base-href ./",
     
-    "build": "npm run postinstall:electron && npm run electron:serve-tsc && ng build",
-    "build:prod": "npm run build -- -c production",
-    "electron:serve-tsc": "tsc -p tsconfig-serve.json",
-    "electron:serve": "wait-on http-get://localhost:4200/ && npm run electron:serve-tsc && electron . --serve",
-    "ng:serve:dev": "ng serve -c dev",
-
-    "start": "npm run postinstall:electron && npm-run-all -p ng:serve:dev electron:serve",
-    "start:web": "npm run postinstall:web && npm run ng:serve:dev",
-
+    "start": "npm run electron:build -- -c dev && npm-run-all -p dist:serve electron:serve",
+      "dist:serve": "npx http-server ./dist -p 4200",
+      "electron:serve": "wait-on tcp:4200 && electron .",
+    
     "build:windows": "npm run build:prod && npx electron-builder build --windows",
-    "build:web": "ng build --configuration production --base-href \"/flacselecterAngular/\""
+      "build:prod": "npm run electron:build -- -c production",
+
+    "start:web": "ng serve -c dev",
+      
+    "build:web": "ng build -c production --base-href \"/flacselecterAngular/\""
   },
-  "devDependencies": {
-    "@angular-builders/custom-webpack": "^18.0.0",
-    "@angular-devkit/build-angular": "18.2.12",
-    "@angular/cli": "18.2.12",
+  "dependencies": {
     "@angular/common": "18.2.12",
     "@angular/compiler": "18.2.12",
     "@angular/compiler-cli": "18.2.12",
@@ -44,31 +30,33 @@
     "@angular/platform-browser": "18.2.12",
     "@angular/platform-browser-dynamic": "18.2.12",
     "@angular/router": "18.2.12",
+    "rxjs": "~7.5.0",
+    "tslint": "~6.1.3",
+    "zone.js": "~0.14.10"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "18.2.12",
+    "@angular/cli": "18.2.12",
+    "@angular/compiler-cli": "18.2.12",
     "@types/jasmine": "2.8.7",
-    "@types/jasminewd2": "2.0.3",
-    "@types/node": "^18.19.68",
-    "codelyzer": "^6.0.2",
-    "core-js": "^3.20.0",
-    "cross-env": "^7.0.3",
-    "electron": "^27.1.0",
-    "electron-builder": "^24.9.1",
-    "electron-reload": "^1.5.0",
+    "electron": "^30.0.1",
+    "electron-builder": "^24.13.3",
+    "electron-debug": "^3.2.0",
+    "electron-reloader": "^1.2.3",
+    "http-server": "^14.1.1",
     "jasmine-core": "~4.5.0",
-    "jasmine-spec-reporter": "~7.0.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.1.0",
-    "karma-coverage-istanbul-reporter": "~3.0.3",
+    "karma-coverage": "~2.1.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
     "npm-run-all": "^4.1.5",
     "npx": "^10.2.2",
-    "protractor": "~7.0.0",
-    "rxjs": "~7.5.0",
-    "ts-node": "~10.9.1",
-    "tslint": "~6.1.3",
     "typescript": "~5.4.5",
     "wait-on": "^7.2.0",
-    "webdriver-manager": "^12.1.9",
-    "zone.js": "~0.14.10"
+    "webdriver-manager": "^12.1.9"
+  },
+  "build": {
+    "asar": true
   }
 }

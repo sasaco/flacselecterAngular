@@ -94,7 +94,7 @@ try {
 
 
 // ローカルファイルにアクセスする ///////////////////////////////
-ipcMain.on('read-csv-file', function(event) {
+ipcMain.on('read-csv-file', (event: any) => {
 
   const csvpath: string = path.join(__dirname, 'dist/assets/data.csv');
   const csvstr:string = fs.readFileSync(csvpath, 'utf-8');

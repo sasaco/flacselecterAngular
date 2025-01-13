@@ -4,22 +4,26 @@
   "newProjectRoot": "projects",
   "projects": {
     "flac-selecter": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
-      "projectType": "application",
+      "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-builders/custom-webpack:browser",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "customWebpackConfig": {
-              "path": "./custom-webpack.config.js",
-              "replaceDuplicatePlugins": true
-            },
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "tsConfig": "tsconfig.json",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "zone.js"
+            ],
+            "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/assets"
             ],
@@ -30,14 +34,10 @@
           },
           "configurations": {
             "dev": {
+              "outputHashing": "none",
               "optimization": false,
-              "outputHashing": "all",
+              "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": false,
-              "aot": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -46,14 +46,8 @@
               ]
             },
             "production": {
-              "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -64,29 +58,17 @@
           }
         },
         "serve": {
-          "builder": "@angular-builders/custom-webpack:dev-server",
-          "options": {
-            "browserTarget": "flac-selecter:build"
-          },
+          "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "dev": {
-              "browserTarget": "flac-selecter:build:dev"
+              "buildTarget": "flac-selecter:build:dev"
             },
             "production": {
-              "browserTarget": "flac-selecter:build:production"
+              "buildTarget": "flac-selecter:build:production"
             }
           }
         }
       }
-    }
-  },
-  "schematics": {
-    "@schematics/angular:component": {
-      "prefix": "app",
-      "styleext": "scss"
-    },
-    "@schematics/angular:directive": {
-      "prefix": "app"
     }
   },
   "cli": {
