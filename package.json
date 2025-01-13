@@ -7,7 +7,7 @@
   "main": "main.js",
   "scripts": {
     "postinstall": "npx electron-builder install-app-deps",
-    "electron:build": "npm run tsc -p tsconfig.electron.json && ng build --base-href ./",
+    "electron:build": "tsc -p tsconfig.electron.json && ng build --base-href ./",
     
     "start": "npm run electron:build -- -c dev && npm-run-all -p dist:serve electron:serve",
       "dist:serve": "npx http-server ./dist -p 4200",
