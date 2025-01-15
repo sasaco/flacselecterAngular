@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { InputData } from './input-data';
 import { ElectronService } from './electron.service';
 
@@ -11,7 +12,10 @@ export class InputDataService {
 
   private _data: any;
 
-  constructor(private electronService: ElectronService) {
+  constructor(
+    private electronService: ElectronService,
+    private http: HttpClient
+  ) {
     this._data = new Array();
     
     if (this.electronService.isElectron) {
@@ -24,25 +28,20 @@ export class InputDataService {
         console.error('No CSV data received in electron mode');
       }
     } else {
-      // Browser environment - implement CSV loading fallback
+      // Browser environment - implement CSV loading fallback using HttpClient
       console.log('Running in browser mode - Loading CSV from assets');
-      const arg = fetch('./assets/data.csv')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+      this.http.get('assets/data.csv', { responseType: 'text' })
+        .subscribe({
+          next: (text) => {
+            if (!text) {
+              throw new Error('Empty CSV data received');
+            }
+            console.log('CSV data loaded successfully');
+            this.parseCSVData(text);
+          },
+          error: (error) => {
+            console.error('Error loading CSV in browser mode:', error);
           }
-          return response.text();
-        })
-        .then(text => {
-          if (!text) {
-            throw new Error('Empty CSV data received');
-          }
-          console.log('CSV data loaded successfully');
-          this.parseCSVData(text);
-        })
-        .catch(error => {
-          console.error('Error loading CSV in browser mode:', error);
-          throw error;
         });
     }
   }
