@@ -9,7 +9,7 @@
     "postinstall": "npx electron-builder install-app-deps",
     "electron:build": "npm run electron:tsc && ng build --base-href ./",
     "electron:tsc": "tsc -p tsconfig.electron.json",
-    "start": "npm run electron:tsc && npm-run-all -p start:web electron:serve",
+    "start": "npm run electron:tsc && npm run start:web",
     "electron:serve": "wait-on tcp:4200 && npx electron . --serve",
     "build": "npm run build:prod && npx electron-builder build",
     "build:prod": "npm run electron:build -- -c production",
