@@ -4,7 +4,7 @@ export class InputData{
     invert: number = 0
     haimenKudo: number = 0
     henkeiMode: number = 1
-    jiyamaKyodo: number = 2
+    jiyamaKyodo: number = 1
     naikuHeniSokudo: number = 1
     uragomeChunyuko: number = 0
     lockBoltKou: number = 0
