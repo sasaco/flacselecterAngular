@@ -16,7 +16,7 @@ export class InputPageComponent implements OnInit {
   public tunnelKeizyoList = [
     { id: 1, title: '単線' },
     { id: 2, title: '複線' },
-    { id: 3, title: '新幹線（在来工法）' },
+    { id: 3, title: '新幹線' },
   ];
 
   // 覆工巻厚
@@ -51,7 +51,7 @@ export class InputPageComponent implements OnInit {
   public tempNaikuHeniSokudo: string | null = null;
   
   // モニタリングデータ
-  public tempMonitoringData: string | null = null;
+  // public tempMonitoringData: string | null = null;
 
   // 裏込注入工
   public uragomeChunyukoStyle: string[] | null = null;
@@ -108,14 +108,14 @@ export class InputPageComponent implements OnInit {
     this.tempFukukouMakiatsu = this.input.Data.fukukouMakiatsu.toString();
     this.tempJiyamaKyodo = this.input.Data.jiyamaKyodo.toString();
     this.tempNaikuHeniSokudo = this.input.Data.naikuHeniSokudo.toString();
-    this.tempMonitoringData = this.input.Data.MonitoringData;
+    // this.tempMonitoringData = this.input.Data.MonitoringData;
     this.setEnable()
   }
   
   ngOnDestroy() {
-    if(this.tempMonitoringData) {
-      this.input.Data.MonitoringData = this.tempMonitoringData;
-    }
+    // if(this.tempMonitoringData) {
+    //   this.input.Data.MonitoringData = this.tempMonitoringData;
+    // }
   }
 
   // 入力状況に合わせて有効無効を変える
@@ -217,8 +217,8 @@ export class InputPageComponent implements OnInit {
   // 覆工巻厚
   setFukukouMakiatsu() {
     const value: number = Number(this.tempFukukouMakiatsu);
-    //新幹線の場合は 50~70, それ以外は 30~60
-    const min: number = (this.input.Data.tunnelKeizyo !== 3) ? 30 : 50; 
+    //新幹線の場合は 30~70, それ以外は 30~60
+    const min: number = (this.input.Data.tunnelKeizyo !== 3) ? 30 : 30; 
     const max: number = (this.input.Data.tunnelKeizyo !== 3) ? 60 : 70; 
     // 有効な入力の場合のみ値を更新する
     if (!Number.isNaN(value)) {
@@ -265,7 +265,7 @@ export class InputPageComponent implements OnInit {
   }
 
 
-  // モニタリングデータの取得
+  /*/ モニタリングデータの取得
   getMonitoringData(): void {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -291,5 +291,5 @@ export class InputPageComponent implements OnInit {
         }
       });
   }
-
+  */
 }

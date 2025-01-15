@@ -1,7 +1,7 @@
 <div>
   <div class="px-8">
-    <div class="flex items-center my-1.5">
-      <h2 class="text-[1.2rem] font-normal mt-1.5 mb-1.5 mr-2">構造条件</h2>
+    <div class="flex items-center mt-4 mb-1.5">
+      <h2 class="text-[1.2rem] font-normal mr-2">構造条件</h2>
       <div class="flex-1 border-b border-border-green"></div>
     </div>
   </div>
@@ -43,8 +43,8 @@
   </div>
 
   <div class="px-8">
-    <div class="flex items-center my-1.5">
-      <h2 class="text-[1.2rem] font-normal mt-1.5 mb-1.5 mr-2">調査・計測結果の条件</h2>
+    <div class="flex items-center mt-6 mb-1.5">
+      <h2 class="text-[1.2rem] font-normal mr-2">調査・計測結果の条件</h2>
       <div class="flex-1 border-b border-border-green"></div>
     </div>
   </div>
@@ -86,17 +86,19 @@
         <legend class="px-2">内空変位速度, 盤ぶくれ速度</legend>
         <input type="number" [(ngModel)]="tempNaikuHeniSokudo" (change)="setNaikuHeniSokudo()" 
           class="w-[65px] text-center border-[1px] [border-style:inset] border-[#767676] px-[2px] py-[1px] disabled:bg-[#666]" />mm/年
-        <button class="ml-2 px-2 py-1 border border-gray-300 rounded hover:bg-gray-100" (click)="getMonitoringData()">モニタリングデータ取得</button>
+        <!-- 
+          <button class="ml-2 px-2 py-1 border border-gray-300 rounded hover:bg-gray-100" (click)="getMonitoringData()">モニタリングデータ取得</button> 
         <div>
           <pre>{{ tempMonitoringData}}</pre>
         </div>
-      </fieldset>
+        -->
+        </fieldset>
     </div>
   </div>
 
   <div class="px-8">
-    <div class="flex items-center my-1.5">
-      <h2 class="text-[1.2rem] font-normal mt-1.5 mb-1.5 mr-2">対策工の条件</h2>
+    <div class="flex items-center mt-6 mb-1.5">
+      <h2 class="text-[1.2rem] font-normal mr-2">対策工の条件</h2>
       <div class="flex-1 border-b border-border-green"></div>
     </div>
   </div>
