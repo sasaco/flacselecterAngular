@@ -2,7 +2,7 @@
 
 ### 1. Angularを起動
 ```bash
-npm run start:web
+npm run start
 ```
 http://localhost:4200 で待機します。
 
