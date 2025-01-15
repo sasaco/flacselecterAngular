@@ -1,4 +1,4 @@
-import {app, Menu, BrowserWindow, ipcMain, shell} from 'electron';
+import {app, Menu, BrowserWindow, ipcMain, shell, screen} from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as fs from 'fs';
@@ -44,7 +44,7 @@ function createWindow(): BrowserWindow {
       label: "メニュー",
       submenu: [
         { label: "Print", click: () => print_to_pdf() },
-        { label: "Debug", click: () => { if (win) win.webContents.openDevTools(); } }
+        { label: "Debug", click: () => { win!.webContents.openDevTools(); } }
       ]
     }
   ];
@@ -106,17 +106,24 @@ ipcMain.on('read-csv-file', (event: any) => {
 
 function print_to_pdf() :void {
 
-  if (win) {
-    win.webContents.printToPDF({
-    }).then(data => {
-      const pdfPath = path.join(__dirname, 'print.pdf')
-      fs.writeFile(pdfPath, data, (error) => {
-        if (error) throw error
-        console.log('Write PDF successfully.')
-        shell.openExternal(`file://${pdfPath}`)
-      })
-    }).catch(error => {
-      throw error
+  win!.webContents.printToPDF({
+    landscape: true,
+    printBackground: true,
+    pageRanges: '1', // 1ページ目だけを印刷
+    margins: { top: 0, bottom: 0, left: 0, right: 0 } // 印刷可能領域に合わせる
+  }).then(data => {
+    const pdfPath = path.join(__dirname, 'print.pdf')
+    fs.writeFile(pdfPath, data, (error) => {
+      if (error) throw error
+      console.log('Write PDF successfully.')
+      shell.openExternal(`file://${pdfPath}`).then(() => {
+        win!.webContents.on('did-finish-load', () => {
+          // リロードを禁止するための処理
+          win!.webContents.clearHistory();
+        });
+      });
     })
-  }
+  }).catch(error => {
+    throw error
+  })
 }
