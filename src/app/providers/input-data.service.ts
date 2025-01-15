@@ -91,19 +91,28 @@ export class InputDataService {
     let makiatsu: number = this.Data.fukukouMakiatsu;
     let kyodo: number = this.Data.jiyamaKyodo;
     if (flg === true) {
+
+      // 一番近い値を選択
+      function near_value(list: number[], target: number): number {
+        let diff = Math.abs(list[0] - target);
+        let result = list[0];
+        for (let i = 1; i < list.length; i++) {
+          const a = Math.abs(list[i] - target);
+          if (a < diff) {
+            diff = a;
+            result = list[i];
+          }
+        }
+        return result;
+      }
+
       // 覆工巻厚 と 地山強度 の中間値を入力されたとき
       if (this.Data.tunnelKeizyo < 3) { // 単線, 複線
-        makiatsu = [30, 45, 60].reduce((prev, curr) => {
-          return Math.abs(curr - makiatsu) < Math.abs(prev - makiatsu) ? curr : prev
-        }) // 30, 45, 60 の中で一番近い値を選択
+        makiatsu = near_value([30, 45, 60], makiatsu) 
       } else { // 新幹線 
-        makiatsu = [30, 50, 70].reduce((prev, curr) => {
-          return Math.abs(curr - makiatsu) < Math.abs(prev - makiatsu) ? curr : prev
-        }) // 30, 50, 70 の中で一番近い値を選択
+        makiatsu = near_value([30, 50, 70], makiatsu) 
       }
-      kyodo = [1, 4, 10].reduce((prev, curr) => {
-        return Math.abs(curr - kyodo) < Math.abs(prev - kyodo) ? curr : prev
-      }) // 1, 4, 10 の中で一番近い値を選択
+      kyodo = near_value([1, 4, 10], kyodo) 
     }
 
     const targetData: number[] = new Array();
@@ -307,4 +316,4 @@ export class InputDataService {
 
   }
 
-  }
+}
