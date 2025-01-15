@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { InputDataService } from '../../providers/input-data.service';
-import { fromEventPattern } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-output-page',
     templateUrl: './output-page.component.html',
-    standalone: false
+    standalone: true,
+    imports: [CommonModule]
 })
-  
 export class OutputPageComponent implements OnInit {
   
   public inputString1: string | null = null;

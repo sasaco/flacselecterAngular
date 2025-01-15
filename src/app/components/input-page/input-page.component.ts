@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { InputDataService } from '../../providers/input-data.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-input-page',
     templateUrl: './input-page.component.html',
-    standalone: false
+    standalone: true,
+    imports: [CommonModule, FormsModule]
 })
-
 export class InputPageComponent implements OnInit {
 
   // トンネル形状
