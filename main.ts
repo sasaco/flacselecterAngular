@@ -28,8 +28,6 @@ function createWindow(): BrowserWindow {
   if (serve) {
     const debug = require('electron-debug');
     debug();
-
-    require('electron-reloader')(module);
     win.loadURL('http://localhost:4200');
   } else {
     win.loadURL(url.format({
@@ -38,6 +36,10 @@ function createWindow(): BrowserWindow {
       slashes: true
     }));
   }
+
+  require('electron-reloader')(module, {
+    ignore: ['print.pdf']
+  });
 
   const template = [
     {
@@ -116,12 +118,7 @@ function print_to_pdf() :void {
     fs.writeFile(pdfPath, data, (error) => {
       if (error) throw error
       console.log('Write PDF successfully.')
-      shell.openExternal(`file://${pdfPath}`).then(() => {
-        win!.webContents.on('did-finish-load', () => {
-          // リロードを禁止するための処理
-          win!.webContents.clearHistory();
-        });
-      });
+      shell.openExternal(`file://${pdfPath}`);      
     })
   }).catch(error => {
     throw error
