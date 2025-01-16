@@ -261,28 +261,28 @@ export class InputDataService {
       // index 3 下限値, 下限値
       const cs3: number[]= this._data.find((row: any) => row[1] === cs[3]) || null;
       if (cs3 == null)  {
-        throw new Error(`巻厚=${ml}(下限値), 地盤強度=${jl}(下限値) のデータが見つかりません${cs[3]}`);
+        throw new Error(`巻厚=${ml}, 地盤強度=${jl} のデータが見つかりません\n${cs[3]}`);
       }
       const ll: number = getEffection(cs3, this.Data.naikuHeniSokudo);
 
       // index 4 上限値, 下限値
       const cs4: number[]= this._data.find((row: any) => row[1] === cs[4]) || null;
       if (cs4 == null)  {
-        throw new Error(`巻厚=${mu}(上限値), 地盤強度=${jl}(下限値) のデータが見つかりません\n${cs[4]}`);
+        throw new Error(`巻厚=${mu}, 地盤強度=${jl} のデータが見つかりません\n${cs[4]}`);
       }
       const ul: number = getEffection(cs4, this.Data.naikuHeniSokudo);
 
       // index 5 下限値, 上限値
       const cs5: number[]= this._data.find((row: any) => row[1] === cs[5]) || null;
       if (cs5 == null)  {
-        throw new Error(`巻厚=${ml}(下限値), 地盤強度=${ju}(上限値) のデータが見つかりません\n${cs[5]}`);
+        throw new Error(`巻厚=${ml}, 地盤強度=${ju} のデータが見つかりません\n${cs[5]}`);
       }
       const lu: number = getEffection(cs5, this.Data.naikuHeniSokudo);
 
       // index 6 上限値, 上限値
       const cs6: number[]= this._data.find((row: any) => row[1] === cs[6]) || null;
       if (cs6 == null)  {
-        throw new Error(`巻厚=${mu}(上限値), 地盤強度=${ju}(上限値) のデータが見つかりません\n${cs[6]}`);
+        throw new Error(`巻厚=${mu}, 地盤強度=${ju} のデータが見つかりません\n${cs[6]}`);
       }
       const uu: number = getEffection(cs6, this.Data.naikuHeniSokudo);
 
@@ -308,7 +308,7 @@ export class InputDataService {
       // 地盤強度 の線形補間
       result = linear(jl, t1, ju, t2, this.Data.jiyamaKyodo);
     } catch (e: any) {
-      // alert(e.message);
+      alert(e.message);
       return 0;
     }
     //少数1桁にラウンド

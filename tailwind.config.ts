@@ -1,3 +1,5 @@
+const plugin = require('tailwindcss/plugin')
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -15,7 +17,15 @@ module.exports = {
         'input-border': '#767676'  // Input border color
       }
     }
-  },
-  plugins: [],
+  },  
+  plugins: [
+    plugin(/** @param {PluginAPI} api */ function({ addBase }) {
+      addBase({
+        'img': {
+          'max-width': 'none'
+        }
+      })
+    })
+  ]
 }
 
