@@ -308,7 +308,7 @@ export class InputDataService {
       // 地盤強度 の線形補間
       result = linear(jl, t1, ju, t2, this.Data.jiyamaKyodo);
     } catch (e: any) {
-      alert(e.message);
+      // alert(e.message);
       return 0;
     }
     //少数1桁にラウンド
