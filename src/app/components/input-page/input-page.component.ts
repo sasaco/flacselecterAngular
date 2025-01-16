@@ -241,12 +241,12 @@ export class InputPageComponent implements OnInit {
     const value: number = Number(this.tempJiyamaKyodo);
     // 有効な入力の場合のみ値を更新する
     if (!Number.isNaN(value)) {
-      if (value < 2) {
-        alert("2以上の数値を入力してください");
-        this.input.Data.jiyamaKyodo = 2;
-      } else if (8 < value) {
-        alert("8以下の数値を入力してください");
-        this.input.Data.jiyamaKyodo = 8;
+      if (value < 1) {
+        alert("1以上の数値を入力してください");
+        this.input.Data.jiyamaKyodo = 1;
+      } else if (10 < value) {
+        alert("10以下の数値を入力してください");
+        this.input.Data.jiyamaKyodo = 10;
       } else {
         this.input.Data.jiyamaKyodo = value;
       }
