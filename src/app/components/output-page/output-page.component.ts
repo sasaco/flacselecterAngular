@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { InputDataService } from '../../providers/input-data.service';
-import { fromEventPattern } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-output-page',
     templateUrl: './output-page.component.html',
-    standalone: false
+    standalone: true,
+    imports: [CommonModule]
 })
-  
 export class OutputPageComponent implements OnInit {
   
   public inputString1: string | null = null;
@@ -18,8 +18,8 @@ export class OutputPageComponent implements OnInit {
   public alertString: string | null = null;
 
   public csvfrm: string | null = null;
-  public effection: number = 0;
-  public displacement: number = 0;
+  public effection: number = 0;     // 変位抑制効果
+  public displacement: number = 0;  // 対策後の予測内空変位速度
 
   constructor(private input: InputDataService) {}
 
@@ -31,16 +31,14 @@ export class OutputPageComponent implements OnInit {
     this.inputString3 = this.getinputString3();
 
     // 画像ファイル名
-    const img: string[] = this.getimgString();
-    this.imgString1 = img[1];
-    this.imgString0 = img[0];
+    this.setimgString();
 
-    this.alertString = this.getalertString();
-    this.effection = this.input.getEffectionNum();
-    this.displacement = this.getDisplacement();
+    this.effection = this.input.getEffectionNum();  // 変位抑制効果
+    this.displacement = this.getDisplacement(); // 対策後の予測内空変位速度
   }
 
-  getinputString1(): string{
+  // 構造条件の文字列
+  private getinputString1(): string{
     let result: string = "";
     switch (this.input.Data.tunnelKeizyo) {
       case 1:
@@ -60,7 +58,8 @@ export class OutputPageComponent implements OnInit {
     return result;
   }
 
-  getinputString2(): string {
+  // 調査・計測結果の文字列
+  private getinputString2(): string {
     let result: string = (this.input.Data.haimenKudo == 0) ? "背面空洞なし" : "背面空洞あり";
     result += "・";
     switch (this.input.Data.henkeiMode) {
@@ -87,7 +86,8 @@ export class OutputPageComponent implements OnInit {
     return result;
   }
 
-  getinputString3(): string {
+  // 対策工条件の文字列
+  private getinputString3(): string {
     let result: string = "";
 
     if (this.input.Data.uragomeChunyuko == 0) {
@@ -123,18 +123,29 @@ export class OutputPageComponent implements OnInit {
     return result;
   }
 
-  getimgString(): string[]{
+  private setimgString(): void{
     const CaseStrings: string[] = this.input.getCaseStrings();
     // 補強しなかった場合のファイル名
-    let imgString0: string = './assets/img/' + CaseStrings[1] + '.png';
+    this.imgString0 = './assets/img/' + CaseStrings[1] + '.png';
     // 補強後 のファイル名
-    let imgString1: string = './assets/img/' + CaseStrings[2] + '.png';
-    return [imgString0, imgString1];
+    this.imgString1 = './assets/img/' + CaseStrings[2] + '.png';
+
+    // 画像のアラート文言
+    this.alertString = null;
+    const tmp = this.imgString1?.split('-');
+    let makiatsu: number = (tmp && tmp.length > 2) ? Number(tmp[1]) : this.input.Data.fukukouMakiatsu;
+    let kyodo: number = (tmp && tmp.length > 2) ? Number(tmp[5]) : this.input.Data.jiyamaKyodo;
+
+    if(makiatsu !== this.input.Data.fukukouMakiatsu || kyodo !== this.input.Data.jiyamaKyodo){
+      this.alertString = '※この画像は覆工巻厚を' + makiatsu + '、地山強度を' + kyodo + 'とした場合のものです。';
+    }
+
   }
 
-  getDisplacement() {
+  // 対策後の予測内空変位速度
+  private getDisplacement() {
     const a: number = this.input.Data.naikuHeniSokudo;
-    const b: number = this.effection;
+    const b: number = this.effection; // 変位抑制効果
     const c: number = a * (1 - (b / 100));
 
     // 少数1 桁にラウンド
@@ -142,22 +153,5 @@ export class OutputPageComponent implements OnInit {
     return result;
   }
 
-  getalertString(): string | null {
-    let makiatsu: number = this.input.Data.fukukouMakiatsu;
-    let kyodo: number = this.input.Data.jiyamaKyodo;
-    if (this.input.Data.tunnelKeizyo < 3) { // 単線, 複線
-      if ((makiatsu == 30 || makiatsu == 60) && (kyodo == 2 || kyodo == 8)) {
-        return null;
-      }
-      makiatsu = makiatsu < 45 ? 30 : 60;
-    } else { // 新幹線   
-      if ((makiatsu == 50 || makiatsu == 70) && (kyodo == 2 || kyodo == 8)) {
-        return null;
-      }
-      makiatsu = makiatsu < 60 ? 50 : 70;
-    }
-    kyodo = kyodo < 5 ? 2 : 8;
-    return '※この画像は覆工巻厚を' + makiatsu + '、地山強度を' + kyodo + 'とした場合のものです。';
-  }
 
 }
