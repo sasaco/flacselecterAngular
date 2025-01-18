@@ -5,6 +5,7 @@
 /tmp
 /release
 *.js
+!/docs/*
 *.js.map
 print.pdf
 
