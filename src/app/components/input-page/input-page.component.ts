@@ -129,7 +129,10 @@ export class InputPageComponent implements OnInit {
           this.input.Data.henkeiMode = 1;
         this.henkeiModeStyle[3] = 'Disable';
       }
-
+      if (this.input.Data.fukukouMakiatsu > 70) {
+        this.tempFukukouMakiatsu = "70";
+        this.setFukukouMakiatsu();
+      }  
     } else {
       // 新幹線（在来工法）ではない
       this.henkeiModeStyle = ['Enable', 'Enable', 'Enable', 'Disable'];
@@ -138,14 +141,14 @@ export class InputPageComponent implements OnInit {
       this.downwardLockBoltEnable = false;
       this.input.Data.downwardLockBoltKou = 0;
       this.input.Data.downwardLockBoltLength = 0;
-    }
-    
+      if (this.input.Data.fukukouMakiatsu > 60) {
+        this.tempFukukouMakiatsu = "60";
+        this.setFukukouMakiatsu();
+      }
+      }
+
     if (this.input.Data.fukukouMakiatsu < 30) {
       this.tempFukukouMakiatsu = "30";
-      this.setFukukouMakiatsu();
-    }
-    if (this.input.Data.fukukouMakiatsu > 60) {
-      this.tempFukukouMakiatsu = "60";
       this.setFukukouMakiatsu();
     }
 
@@ -225,10 +228,10 @@ export class InputPageComponent implements OnInit {
     // 有効な入力の場合のみ値を更新する
     if (!Number.isNaN(value)) {
       if (value < min) {
-        alert(min + "以上の数値を入力してください");
+        //alert(min + "以上の数値を入力してください");
         this.input.Data.fukukouMakiatsu = min;
       } else if (max < value) {
-        alert(max + "以下の数値を入力してください");
+        //alert(max + "以下の数値を入力してください");
         this.input.Data.fukukouMakiatsu = max;
       } else {
         this.input.Data.fukukouMakiatsu = value;
@@ -244,10 +247,10 @@ export class InputPageComponent implements OnInit {
     // 有効な入力の場合のみ値を更新する
     if (!Number.isNaN(value)) {
       if (value < 1) {
-        alert("1以上の数値を入力してください");
+        //alert("1以上の数値を入力してください");
         this.input.Data.jiyamaKyodo = 1;
       } else if (10 < value) {
-        alert("10以下の数値を入力してください");
+        //alert("10以下の数値を入力してください");
         this.input.Data.jiyamaKyodo = 10;
       } else {
         this.input.Data.jiyamaKyodo = value;
