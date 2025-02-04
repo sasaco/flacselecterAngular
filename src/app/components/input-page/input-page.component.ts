@@ -129,10 +129,7 @@ export class InputPageComponent implements OnInit {
           this.input.Data.henkeiMode = 1;
         this.henkeiModeStyle[3] = 'Disable';
       }
-      if (this.input.Data.fukukouMakiatsu < 50) {
-        this.tempFukukouMakiatsu = "50";
-        this.setFukukouMakiatsu();
-      }
+
     } else {
       // 新幹線（在来工法）ではない
       this.henkeiModeStyle = ['Enable', 'Enable', 'Enable', 'Disable'];
@@ -141,10 +138,15 @@ export class InputPageComponent implements OnInit {
       this.downwardLockBoltEnable = false;
       this.input.Data.downwardLockBoltKou = 0;
       this.input.Data.downwardLockBoltLength = 0;
-      if (this.input.Data.fukukouMakiatsu > 60) {
-        this.tempFukukouMakiatsu = "60";
-        this.setFukukouMakiatsu();
-      }
+    }
+    
+    if (this.input.Data.fukukouMakiatsu < 30) {
+      this.tempFukukouMakiatsu = "30";
+      this.setFukukouMakiatsu();
+    }
+    if (this.input.Data.fukukouMakiatsu > 60) {
+      this.tempFukukouMakiatsu = "60";
+      this.setFukukouMakiatsu();
     }
 
     // 盤ぶくれモード
