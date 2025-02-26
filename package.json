@@ -1,7 +1,7 @@
 {
   "name": "flac-selecter",
-  "version": "3.0.1",
-  "description": "調査・計測データに基づく対策工設計ツール",
+  "version": "3.0.2",
+  "description": "変状トンネル対策工設計ツール",
   "author": "公益財団法人 鉄道総合技術研究所",
   "private": true,
   "main": "main.js",
