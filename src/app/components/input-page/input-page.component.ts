@@ -264,7 +264,15 @@ export class InputPageComponent implements OnInit {
     const value: number = Number(this.tempNaikuHeniSokudo);
     // 有効な入力の場合のみ値を更新する
     if (!Number.isNaN(value)) {
-      this.input.Data.naikuHeniSokudo = value;
+      if (value <= 0) {
+        //alert("0以上の数値を入力してください");
+        this.input.Data.naikuHeniSokudo = 1;
+      } else if (10 < value) {
+        //alert("10以下の数値を入力してください");
+        this.input.Data.naikuHeniSokudo = 10;
+      } else {
+        this.input.Data.naikuHeniSokudo = value;
+      }
     }
     this.tempNaikuHeniSokudo = this.input.Data.naikuHeniSokudo.toString();
   }
