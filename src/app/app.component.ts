@@ -12,9 +12,11 @@ import { RouterModule } from '@angular/router';
 })
 export class AppComponent {
   public version: string;
+  public description: string;
 
   constructor(public electronService: ElectronService) {
     this.version = packageJson.version;
+    this.description = packageJson.description;
     if (electronService.isElectron) {
       console.log('Mode electron');
       console.log('Electron ipcRenderer', electronService.ipcRenderer);
